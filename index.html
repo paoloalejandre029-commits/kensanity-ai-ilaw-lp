@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KENSANITY AI ILAW LP GENERATOR</title>
+<style>
+  /* ===== DESIGN TOKENS ===== */
+  :root {
+    --dark-orange: #FF6B00;
+    --dark-orange-dim: #CC5500;
+    --fuchsia: #FF00AA;
+    --fuchsia-dim: #CC0088;
+    --neon-green: #39FF14;
+    --neon-green-dim: #28CC0F;
+    --indigo: #4B0082;
+    --indigo-light: #7B2FBE;
+    --light-teal: #00CED1;
+    --light-teal-dim: #00A8AB;
+    --bg-dark: #0D0D1A;
+    --bg-card: #1A1A2E;
+    --bg-input: #12122A;
+    --border-glow: rgba(0,206,209,0.35);
+    --text-main: #E8E8FF;
+    --text-muted: #888AAA;
+    --heavy-violet: #3B0070;
+    --slate-gray: #708090;
+    --font-ui: 'Arial', sans-serif;
+    --font-narrow: 'Arial Narrow', Arial, sans-serif;
+    --radius: 10px;
+    --transition: 0.22s ease;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-dark);
+    background-image:
+      radial-gradient(ellipse at 10% 20%, rgba(75,0,130,0.45) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 10%, rgba(255,0,170,0.22) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 90%, rgba(0,206,209,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 70%, rgba(255,107,0,0.15) 0%, transparent 40%);
+    min-height: 100vh;
+    font-family: var(--font-ui);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== HEADER ===== */
+  .app-header {
+    text-align: center;
+    padding: 22px 16px 10px;
+    position: relative;
+  }
+  .app-header::before {
+    content: '';
+    position: absolute;
+    left: 50%; top: 0;
+    transform: translateX(-50%);
+    width: 340px; height: 3px;
+    background: linear-gradient(90deg, var(--dark-orange), var(--fuchsia), var(--neon-green), var(--indigo-light), var(--light-teal));
+    border-radius: 2px;
+  }
+  .app-title {
+    font-family: var(--font-ui);
+    font-size: clamp(1.1rem, 3.5vw, 1.75rem);
+    font-weight: 900;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--dark-orange), var(--fuchsia), var(--neon-green), var(--light-teal));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    margin-bottom: 4px;
+    filter: drop-shadow(0 0 8px rgba(255,107,0,0.5));
+  }
+  .app-subtitle {
+    font-size: 0.78rem;
+    color: var(--light-teal);
+    letter-spacing: 1px;
+    font-style: italic;
+    opacity: 0.8;
+  }
+
+  /* ===== MAIN CONTAINER ===== */
+  .main-container {
+    max-width: 820px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 14px 80px;
+    flex: 1;
+  }
+
+  /* ===== LANDING PAGE ===== */
+  #landingPage {
+    padding-top: 10px;
+  }
+  #lpTemplate { display: none; padding-top: 10px; }
+
+  /* ===== FORM SECTION ===== */
+  .form-section {
+    background: linear-gradient(135deg, rgba(26,26,46,0.95), rgba(18,18,42,0.98));
+    border: 1px solid rgba(0,206,209,0.2);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 24px rgba(75,0,130,0.25), 0 0 0 1px rgba(255,107,0,0.06);
+  }
+  .section-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--light-teal);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(0,206,209,0.35), transparent);
+  }
+
+  /* ===== INPUT ROWS ===== */
+  .input-row {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+    margin-bottom: 10px;
+  }
+  .input-row:last-child { margin-bottom: 0; }
+
+  /* ===== INPUT FIELD WRAPPER ===== */
+  .field-wrap {
+    position: relative;
+    flex: 1;
+  }
+  .field-wrap.full { flex: none; width: 100%; }
+
+  /* ===== CUSTOM INPUT / SELECT DISPLAY ===== */
+  .custom-input, .custom-select-display, .custom-textarea {
+    width: 100%;
+    background: var(--bg-input);
+    border: 1.5px solid rgba(0,206,209,0.25);
+    border-radius: var(--radius);
+    padding: 11px 14px;
+    color: var(--text-main);
+    font-family: var(--font-ui);
+    font-size: 0.88rem;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    outline: none;
+    appearance: none;
+  }
+  .custom-input:focus, .custom-select-display:focus, .custom-textarea:focus {
+    border-color: var(--light-teal);
+    box-shadow: 0 0 0 3px rgba(0,206,209,0.15), 0 0 12px rgba(0,206,209,0.1);
+  }
+  .custom-input::placeholder, .custom-textarea::placeholder { color: var(--text-muted); font-style: italic; }
+
+  .custom-select-display {
+    cursor: pointer;
+    padding-right: 36px;
+    color: var(--text-muted);
+    font-style: italic;
+    user-select: none;
+  }
+  .custom-select-display.has-value { color: var(--text-main); font-style: normal; }
+
+  .select-arrow {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--light-teal);
+    font-size: 11px;
+    transition: transform var(--transition);
+  }
+  .field-wrap.open .select-arrow { transform: translateY(-50%) rotate(180deg); }
+
+  /* ===== DROPDOWN MENU ===== */
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0; right: 0;
+    background: #1C1C38;
+    border: 1.5px solid rgba(0,206,209,0.35);
+    border-radius: var(--radius);
+    z-index: 999;
+    max-height: 220px;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    scrollbar-width: thin;
+    scrollbar-color: var(--indigo-light) transparent;
+  }
+  .dropdown-menu.open { display: block; }
+  .dropdown-item {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background var(--transition);
+  }
+  .dropdown-item:last-child { border-bottom: none; }
+  .dropdown-item:hover { background: rgba(0,206,209,0.12); color: var(--light-teal); }
+  .dropdown-item.selected { color: var(--neon-green); background: rgba(57,255,20,0.06); }
+
+  /* ===== DATE BUTTON ===== */
+  .date-btn {
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--dark-orange), var(--fuchsia));
+    border: none;
+    border-radius: var(--radius);
+    padding: 11px 16px;
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+    white-space: nowrap;
+    box-shadow: 0 2px 12px rgba(255,107,0,0.35);
+  }
+  .date-btn:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 4px 18px rgba(255,107,0,0.5); }
+  .date-btn:active { transform: translateY(0); }
+
+  /* ===== GENERATE / CLEAR BUTTONS ===== */
+  .action-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+    justify-content: center;
+  }
+  .btn-generate {
+    background: linear-gradient(135deg, var(--neon-green), var(--light-teal));
+    color: #000;
+    border: none;
+    border-radius: var(--radius);
+    padding: 13px 36px;
+    font-size: 1rem;
+    font-weight: 900;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all var(--transition);
+    box-shadow: 0 2px 18px rgba(57,255,20,0.35);
+  }
+  .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(57,255,20,0.5); }
+  .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .btn-clear {
+    background: transparent;
+    color: var(--fuchsia);
+    border: 2px solid var(--fuchsia);
+    border-radius: var(--radius);
+    padding: 13px 28px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all var(--transition);
+  }
+  .btn-clear:hover { background: rgba(255,0,170,0.1); box-shadow: 0 0 16px rgba(255,0,170,0.3); }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 2000;
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: linear-gradient(145deg, #1A1A38, #0F0F28);
+    border: 2px solid rgba(0,206,209,0.4);
+    border-radius: 16px;
+    padding: 28px;
+    width: 92%;
+    max-width: 440px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.7), 0 0 32px rgba(75,0,130,0.3);
+  }
+  .modal-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--light-teal);
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .modal-date-group {
+    margin-bottom: 16px;
+  }
+  .modal-date-label {
+    font-size: 0.75rem;
+    color: var(--fuchsia);
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .modal-date-input {
+    width: 100%;
+    background: var(--bg-input);
+    border: 1.5px solid rgba(255,0,170,0.3);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color var(--transition);
+  }
+  .modal-date-input:focus { border-color: var(--fuchsia); box-shadow: 0 0 10px rgba(255,0,170,0.2); }
+  .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+  .modal-btn {
+    flex: 1;
+    padding: 11px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .modal-btn.confirm {
+    background: linear-gradient(135deg, var(--light-teal), var(--neon-green-dim));
+    color: #000;
+  }
+  .modal-btn.confirm:hover { opacity: 0.88; }
+  .modal-btn.cancel {
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    color: var(--text-muted);
+  }
+  .modal-btn.cancel:hover { border-color: var(--fuchsia); color: var(--fuchsia); }
+
+  /* ===== TEXTAREA ===== */
+  .custom-textarea {
+    resize: vertical;
+    min-height: 70px;
+    font-style: italic;
+  }
+  .custom-textarea.has-value { font-style: normal; }
+
+  /* ===== LOADING SPINNER ===== */
+  .loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 3000;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    backdrop-filter: blur(6px);
+  }
+  .loading-overlay.open { display: flex; }
+  .spinner {
+    width: 56px; height: 56px;
+    border: 4px solid rgba(255,255,255,0.1);
+    border-top-color: var(--neon-green);
+    border-right-color: var(--fuchsia);
+    border-bottom-color: var(--light-teal);
+    border-left-color: var(--dark-orange);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text {
+    color: var(--text-main);
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    text-align: center;
+    font-weight: 600;
+  }
+  .loading-sub {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* ===== LP TEMPLATE PAGE ===== */
+  .lp-header {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .lp-title-text {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size: 13px;
+    color: #111;
+    background: #fff;
+    display: inline-block;
+    padding: 8px 24px;
+    border-radius: 8px;
+    line-height: 1.5;
+  }
+
+  /* ===== TABLE WRAPPER ===== */
+  .table-outer-wrap {
+    background: #fff;
+    border-radius: 10px;
+    overflow: auto;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.5);
+    margin-bottom: 18px;
+  }
+  .lp-table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 780px;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size: 9pt;
+    color: #111;
+  }
+  .lp-table td, .lp-table th {
+    border: 1px solid #000;
+    padding: 5px 7px;
+    vertical-align: top;
+  }
+  .lp-table .col-header {
+    background-color: var(--slate-gray);
+    color: #fff;
+    font-weight: bold;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size: 9pt;
+    width: 130px;
+    min-width: 110px;
+  }
+  .lp-table .major-header td {
+    background-color: var(--slate-gray);
+    color: #fff;
+    font-weight: bold;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size: 10pt;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  .lp-table .session-header th {
+    background-color: var(--slate-gray);
+    color: #fff;
+    font-weight: bold;
+    font-size: 9pt;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+  }
+  .lp-table .data-cell {
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size: 9pt;
+    color: #111;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* ===== LP ACTION BUTTONS ===== */
+  .lp-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 14px 0 8px;
+  }
+  .lp-btn {
+    padding: 11px 22px;
+    border-radius: var(--radius);
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    border: none;
+    transition: all var(--transition);
+  }
+  .lp-btn.save-btn {
+    background: linear-gradient(135deg, var(--indigo-light), var(--fuchsia-dim));
+    color: #fff;
+    box-shadow: 0 2px 14px rgba(75,0,130,0.4);
+  }
+  .lp-btn.save-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .lp-btn.regen-btn {
+    background: linear-gradient(135deg, var(--dark-orange), #FF4500);
+    color: #fff;
+    box-shadow: 0 2px 14px rgba(255,107,0,0.4);
+  }
+  .lp-btn.regen-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .lp-btn.back-btn {
+    background: linear-gradient(135deg, var(--light-teal-dim), var(--indigo-light));
+    color: #fff;
+    box-shadow: 0 2px 14px rgba(0,206,209,0.3);
+  }
+  .lp-btn.back-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .lp-btn.exit-btn {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.2);
+    color: var(--text-muted);
+  }
+  .lp-btn.exit-btn:hover { border-color: var(--fuchsia); color: var(--fuchsia); }
+
+  /* Save options dropdown */
+  .save-dropdown {
+    display: none;
+    position: fixed;
+    background: #1C1C38;
+    border: 1.5px solid rgba(0,206,209,0.35);
+    border-radius: var(--radius);
+    z-index: 9999;
+    min-width: 180px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  }
+  .save-dropdown.open { display: block; }
+  .save-option {
+    padding: 11px 18px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: var(--text-main);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .save-option:last-child { border-bottom: none; }
+  .save-option:hover { background: rgba(0,206,209,0.12); color: var(--light-teal); }
+  .save-icon { font-size: 14px; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    background-color: rgba(59,0,112,0.65);
+    backdrop-filter: blur(4px);
+    overflow: hidden;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+  }
+  .footer-ticker {
+    display: inline-block;
+    white-space: nowrap;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size: 9pt;
+    font-weight: bold;
+    font-style: italic;
+    color: #fff;
+    animation: tickerScroll 38s linear infinite;
+    padding-left: 100%;
+  }
+  @keyframes tickerScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-200%); }
+  }
+  .blink-text {
+    animation: blink 1.2s step-start infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
+  }
+
+  /* ===== ERROR NOTICE ===== */
+  .error-notice {
+    background: rgba(255,0,0,0.12);
+    border: 1px solid rgba(255,80,80,0.4);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: #FF8080;
+    font-size: 0.82rem;
+    margin-top: 10px;
+    display: none;
+  }
+  .error-notice.show { display: block; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
+    .input-row { flex-direction: column; }
+    .date-btn { width: 100%; }
+    .action-row { flex-direction: column; }
+    .lp-actions { flex-direction: column; align-items: center; }
+    .lp-btn { width: 100%; max-width: 280px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="app-header">
+  <div class="app-title">⚡ KENSANITY AI ILAW LP GENERATOR ⚡</div>
+  <div class="app-subtitle">Enhanced K to 10 Curriculum | DepEd Philippines | Three-Terms | ILAW Format</div>
+</header>
+
+<div class="main-container">
+
+  <!-- ===== LANDING PAGE ===== -->
+  <div id="landingPage">
+
+    <!-- API KEY -->
+    <div class="form-section" style="border-color:rgba(255,107,0,0.4);box-shadow:0 4px 24px rgba(255,107,0,0.15);">
+      <div class="section-label" style="color:var(--dark-orange);">🔑 Anthropic API Key</div>
+      <div class="input-row">
+        <div class="field-wrap" style="position:relative;">
+          <input type="password" class="custom-input" id="apiKeyInput"
+            placeholder="Paste your Anthropic API key here (sk-ant-...)"
+            style="font-style:italic;padding-right:46px;border-color:rgba(255,107,0,0.35);">
+          <button onclick="toggleApiKeyVisibility()" id="apiKeyToggle"
+            style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--light-teal);cursor:pointer;font-size:16px;padding:2px 4px;">👁</button>
+        </div>
+      </div>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-top:6px;line-height:1.5;padding:0 2px;">
+        ⚠️ Your API key is used only in your browser and never stored anywhere else. Get your key at
+        <a href="https://console.anthropic.com" target="_blank" style="color:var(--light-teal);">console.anthropic.com</a>.
+        Run this app via <strong style="color:var(--neon-green);">GitHub Pages or Vercel</strong> — API calls are blocked when opening the file directly from your computer (file://).
+      </div>
+    </div>
+
+    <!-- DATE + GRADE -->
+    <div class="form-section">
+      <div class="section-label">📅 Schedule & Grade Information</div>
+
+      <!-- Date Row -->
+      <div class="input-row">
+        <div class="field-wrap">
+          <div class="custom-select-display" id="dateDisplay">Inclusive dates</div>
+        </div>
+        <button class="date-btn" onclick="openDateModal()">📅 Date Picker</button>
+      </div>
+
+      <!-- Grade Level -->
+      <div class="input-row">
+        <div class="field-wrap" id="gradeWrap">
+          <div class="custom-select-display" id="gradeDisplay" onclick="toggleDropdown('gradeWrap', 'gradeMenu')">Select Grade Level</div>
+          <span class="select-arrow">▼</span>
+          <div class="dropdown-menu" id="gradeMenu">
+            <div class="dropdown-item" onclick="selectGrade('Grade 1')">Grade 1</div>
+            <div class="dropdown-item" onclick="selectGrade('Grade 2')">Grade 2</div>
+            <div class="dropdown-item" onclick="selectGrade('Grade 3')">Grade 3</div>
+            <div class="dropdown-item" onclick="selectGrade('Grade 4')">Grade 4</div>
+            <div class="dropdown-item" onclick="selectGrade('Grade 5')">Grade 5</div>
+            <div class="dropdown-item" onclick="selectGrade('Grade 6')">Grade 6</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section -->
+      <div class="input-row">
+        <div class="field-wrap full">
+          <input type="text" class="custom-input" id="sectionInput" placeholder="Input name of Section here!" maxlength="100">
+        </div>
+      </div>
+    </div>
+
+    <!-- LEARNING AREA + ELEMENT -->
+    <div class="form-section">
+      <div class="section-label">📚 Learning Area & Element</div>
+
+      <!-- Learning Area -->
+      <div class="input-row">
+        <div class="field-wrap" id="subjectWrap">
+          <div class="custom-select-display" id="subjectDisplay" onclick="toggleDropdown('subjectWrap', 'subjectMenu')">Input Learning Area here!</div>
+          <span class="select-arrow">▼</span>
+          <div class="dropdown-menu" id="subjectMenu"></div>
+        </div>
+      </div>
+
+      <!-- Element -->
+      <div class="input-row">
+        <div class="field-wrap" id="elementWrap">
+          <div class="custom-select-display" id="elementDisplay" onclick="toggleDropdown('elementWrap', 'elementMenu')">Select Element here!</div>
+          <span class="select-arrow">▼</span>
+          <div class="dropdown-menu" id="elementMenu"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TERM & WEEK & TIME -->
+    <div class="form-section">
+      <div class="section-label">📋 Term, Week & Time</div>
+      <div class="input-row">
+        <div class="field-wrap">
+          <input type="number" class="custom-input" id="termInput" placeholder="Input Term here! (1–3)" min="1" max="3" style="font-style:italic;">
+        </div>
+        <div class="field-wrap">
+          <input type="number" class="custom-input" id="weekInput" placeholder="Input Week number here! (1–99)" min="1" max="99" style="font-style:italic;">
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="field-wrap full">
+          <input type="text" class="custom-input" id="timeInput" placeholder="Input time schedule for the Learning Area!" maxlength="100" style="font-style:italic;">
+        </div>
+      </div>
+    </div>
+
+    <!-- TEACHERS & SCHOOL -->
+    <div class="form-section">
+      <div class="section-label">👩‍🏫 Teacher & School Information</div>
+      <div class="input-row">
+        <div class="field-wrap">
+          <input type="text" class="custom-input" id="teacherInput" placeholder="Input name of teacher here!" style="font-style:italic;">
+        </div>
+        <div class="field-wrap">
+          <input type="text" class="custom-input" id="teacherPositionInput" placeholder="Input teacher position here!" style="font-style:italic;">
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="field-wrap">
+          <input type="text" class="custom-input" id="schoolHeadInput" placeholder="Input name of school head here!" style="font-style:italic;">
+        </div>
+        <div class="field-wrap">
+          <input type="text" class="custom-input" id="schoolHeadPositionInput" placeholder="Input school head position here!" style="font-style:italic;">
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="field-wrap full">
+          <input type="text" class="custom-input" id="schoolNameInput" placeholder="Input name of school here!" style="font-style:italic;">
+        </div>
+      </div>
+    </div>
+
+    <!-- LEARNING COMPETENCY -->
+    <div class="form-section">
+      <div class="section-label">🎯 Learning Competency</div>
+      <div class="input-row">
+        <div class="field-wrap full">
+          <textarea class="custom-textarea" id="competencyInput" placeholder="Input Learning Competency here!" rows="4"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div id="formError" class="error-notice">⚠️ Please fill in all required fields before generating (including your API key at the top).</div>
+
+    <!-- ACTIONS -->
+    <div class="action-row">
+      <button class="btn-generate" onclick="generateLP()">⚡ GENERATE ILAW LP</button>
+      <button class="btn-clear" onclick="clearAll()">🗑 CLEAR ALL</button>
+    </div>
+
+  </div><!-- end landingPage -->
+
+  <!-- ===== LP TEMPLATE PAGE ===== -->
+  <div id="lpTemplate">
+    <div class="lp-header">
+      <div class="lp-title-text">
+        DEPED LESSON PLAN | ILAW Format<br>
+        Enhanced K to 10 Curriculum | Three-Terms
+      </div>
+    </div>
+
+    <!-- Action buttons TOP -->
+    <div class="lp-actions">
+      <button class="lp-btn save-btn" onclick="showSaveOptions(event)">💾 SAVE</button>
+      <button class="lp-btn regen-btn" onclick="regenLP()">🔄 REGENERATE</button>
+      <button class="lp-btn back-btn" onclick="goBack()">← BACK</button>
+      <button class="lp-btn exit-btn" onclick="exitApp()">✕ EXIT</button>
+    </div>
+
+    <div class="table-outer-wrap">
+      <table class="lp-table" id="lpTable">
+        <!-- Populated by JS -->
+      </table>
+    </div>
+
+    <!-- Action buttons BOTTOM -->
+    <div class="lp-actions">
+      <button class="lp-btn save-btn" onclick="showSaveOptions(event)">💾 SAVE</button>
+      <button class="lp-btn regen-btn" onclick="regenLP()">🔄 REGENERATE</button>
+      <button class="lp-btn back-btn" onclick="goBack()">← BACK</button>
+      <button class="lp-btn exit-btn" onclick="exitApp()">✕ EXIT</button>
+    </div>
+  </div><!-- end lpTemplate -->
+
+</div><!-- end main-container -->
+
+<!-- ===== DATE MODAL ===== -->
+<div class="modal-overlay" id="dateModal">
+  <div class="modal-box">
+    <div class="modal-title">📅 Select Inclusive Dates</div>
+    <div class="modal-date-group">
+      <div class="modal-date-label">Beginning Date</div>
+      <input type="date" class="modal-date-input" id="startDate">
+    </div>
+    <div class="modal-date-group">
+      <div class="modal-date-label">End Date</div>
+      <input type="date" class="modal-date-input" id="endDate">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeDateModal()">Cancel</button>
+      <button class="modal-btn confirm" onclick="confirmDates()">Confirm Dates</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SAVE DROPDOWN ===== -->
+<div class="save-dropdown" id="saveDropdown">
+  <div class="save-option" onclick="saveAs('xlsx')"><span class="save-icon">📊</span> Excel (.xlsx) <small style="color:#aaa;font-size:10px;margin-left:4px;">Recommended</small></div>
+  <div class="save-option" onclick="saveAs('docx')"><span class="save-icon">📄</span> Word (.docx)</div>
+  <div class="save-option" onclick="saveAs('pdf')"><span class="save-icon">📑</span> PDF</div>
+</div>
+
+<!-- ===== LOADING OVERLAY ===== -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text">🤖 AI is crafting your ILAW Lesson Plan...</div>
+  <div class="loading-sub">This may take a moment. Please wait.</div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <span class="footer-ticker">
+    <span class="blink-text">KENSANITY AI ILAW LP GENERATOR is vibe-coded by PAOLO M. ALEJANDRE, Teacher III of 124221 San Pablo Elementary School, Schools Division of Ormoc City, DepEd Region VIII | All rights reserved ©Kensanity AI 2026</span>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="blink-text">KENSANITY AI ILAW LP GENERATOR is vibe-coded by PAOLO M. ALEJANDRE, Teacher III of 124221 San Pablo Elementary School, Schools Division of Ormoc City, DepEd Region VIII | All rights reserved ©Kensanity AI 2026</span>
+  </span>
+</footer>
+
+<script>
+/* ==============================
+   STATE
+============================== */
+const state = {
+  dates: '',
+  grade: '',
+  section: '',
+  subject: '',
+  element: '',
+  term: '',
+  week: '',
+  time: '',
+  teacher: '',
+  teacherPosition: '',
+  schoolHead: '',
+  schoolHeadPosition: '',
+  school: '',
+  competency: '',
+  generatedData: null,
+};
+
+/* ==============================
+   GRADE SUBJECTS
+============================== */
+const lowGradeSubjects = [
+  'Language', 'Reading and Literacy', 'Mathematics', 'Makabansa',
+  'Good Manners and Right Conduct (GMRC)', 'English', 'Filipino', 'Science'
+];
+const highGradeSubjects = [
+  'English', 'Filipino', 'Science', 'Mathematics',
+  'Araling Panlipunan (AP)', 'MAPEH (Music, Arts, Physical Education, and Health)',
+  'EPP (Edukasyong Pantahanan at Pangkabuhayan)',
+  'Technology and Livelihood Education (TLE)',
+  'Good Manners and Right Conduct (GMRC)'
+];
+const mapehElements = ['Not Applicable', 'Music', 'Arts', 'Physical Education', 'Health'];
+const eppTleElements = [
+  'Not Applicable',
+  'AFA (Agri-fishery and Arts)',
+  'Family and Consumer Science (FCS)',
+  'Industrial Arts (IA)',
+  'Information and Communications Technology (ICT)'
+];
+
+/* ==============================
+   DROPDOWN TOGGLE
+============================== */
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.field-wrap')) {
+    document.querySelectorAll('.field-wrap.open').forEach(w => {
+      w.classList.remove('open');
+      w.querySelector('.dropdown-menu')?.classList.remove('open');
+    });
+  }
+  if (!e.target.closest('.save-btn') && !e.target.closest('#saveDropdown')) {
+    document.getElementById('saveDropdown').classList.remove('open');
+  }
+});
+
+function toggleDropdown(wrapId, menuId) {
+  const wrap = document.getElementById(wrapId);
+  const menu = document.getElementById(menuId);
+  const isOpen = wrap.classList.contains('open');
+  document.querySelectorAll('.field-wrap.open').forEach(w => {
+    w.classList.remove('open');
+    w.querySelector('.dropdown-menu')?.classList.remove('open');
+  });
+  if (!isOpen) {
+    wrap.classList.add('open');
+    menu.classList.add('open');
+  }
+}
+
+/* ==============================
+   GRADE SELECTION
+============================== */
+function selectGrade(grade) {
+  state.grade = grade;
+  const disp = document.getElementById('gradeDisplay');
+  disp.textContent = grade;
+  disp.classList.add('has-value');
+  document.getElementById('gradeWrap').classList.remove('open');
+  document.getElementById('gradeMenu').classList.remove('open');
+  populateSubjects(grade);
+  resetSubject();
+  resetElement();
+}
+
+function populateSubjects(grade) {
+  const num = parseInt(grade.replace('Grade ', ''));
+  const subjects = num <= 3 ? lowGradeSubjects : highGradeSubjects;
+  const menu = document.getElementById('subjectMenu');
+  menu.innerHTML = '';
+  subjects.forEach(s => {
+    const item = document.createElement('div');
+    item.className = 'dropdown-item';
+    item.textContent = s;
+    item.onclick = () => selectSubject(s);
+    menu.appendChild(item);
+  });
+}
+
+function resetSubject() {
+  state.subject = '';
+  const disp = document.getElementById('subjectDisplay');
+  disp.textContent = 'Input Learning Area here!';
+  disp.classList.remove('has-value');
+}
+
+function resetElement() {
+  state.element = '';
+  const disp = document.getElementById('elementDisplay');
+  const wrap = document.getElementById('elementWrap');
+  disp.textContent = 'Select Element here!';
+  disp.classList.remove('has-value');
+  disp.style.cursor = 'pointer';
+  wrap.style.opacity = '1';
+  wrap.style.pointerEvents = 'auto';
+  document.getElementById('elementMenu').innerHTML = '';
+}
+
+/* ==============================
+   SUBJECT SELECTION
+============================== */
+function selectSubject(subject) {
+  state.subject = subject;
+  const disp = document.getElementById('subjectDisplay');
+  disp.textContent = subject;
+  disp.classList.add('has-value');
+  document.getElementById('subjectWrap').classList.remove('open');
+  document.getElementById('subjectMenu').classList.remove('open');
+  // Reset element first, THEN populate — order matters!
+  resetElement();
+  populateElements(subject);
+}
+
+function populateElements(subject) {
+  const menu = document.getElementById('elementMenu');
+  const wrap = document.getElementById('elementWrap');
+  const disp = document.getElementById('elementDisplay');
+  menu.innerHTML = '';
+
+  let elements = null;
+  if (subject.includes('MAPEH')) elements = mapehElements;
+  else if (subject.includes('EPP') || subject.includes('TLE')) elements = eppTleElements;
+
+  if (elements) {
+    // Subject has elements — enable the dropdown
+    wrap.style.opacity = '1';
+    wrap.style.pointerEvents = 'auto';
+    disp.style.cursor = 'pointer';
+    disp.textContent = 'Select Element here!';
+    disp.classList.remove('has-value');
+
+    elements.forEach(el => {
+      const item = document.createElement('div');
+      item.className = 'dropdown-item';
+      item.textContent = el;
+      item.onclick = () => selectElement(el);
+      menu.appendChild(item);
+    });
+  } else {
+    // Subject has no elements — auto-set to N/A and dim the dropdown
+    state.element = 'Not Applicable';
+    disp.textContent = 'Not Applicable';
+    disp.classList.add('has-value');
+    wrap.style.opacity = '0.45';
+    wrap.style.pointerEvents = 'none';
+    disp.style.cursor = 'not-allowed';
+  }
+}
+
+function selectElement(el) {
+  state.element = el;
+  const disp = document.getElementById('elementDisplay');
+  disp.textContent = el;
+  disp.classList.add('has-value');
+  document.getElementById('elementWrap').classList.remove('open');
+  document.getElementById('elementMenu').classList.remove('open');
+}
+
+/* ==============================
+   DATE MODAL
+============================== */
+function openDateModal() {
+  document.getElementById('dateModal').classList.add('open');
+}
+function closeDateModal() {
+  document.getElementById('dateModal').classList.remove('open');
+}
+function confirmDates() {
+  const start = document.getElementById('startDate').value;
+  const end = document.getElementById('endDate').value;
+  if (!start || !end) { alert('Please select both dates.'); return; }
+  if (end < start) { alert('End date must be after beginning date.'); return; }
+  const fmt = d => {
+    const [y, m, day] = d.split('-');
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return `${months[parseInt(m)-1]} ${parseInt(day)}, ${y}`;
+  };
+  state.dates = `${fmt(start)} – ${fmt(end)}`;
+  const disp = document.getElementById('dateDisplay');
+  disp.textContent = state.dates;
+  disp.classList.add('has-value');
+  closeDateModal();
+}
+
+/* ==============================
+   INPUT VALIDATION
+============================== */
+document.getElementById('termInput').addEventListener('input', function() {
+  let v = parseInt(this.value);
+  if (isNaN(v)) { this.value = ''; return; }
+  if (v < 1) this.value = 1;
+  if (v > 3) this.value = 3;
+});
+document.getElementById('weekInput').addEventListener('input', function() {
+  let v = parseInt(this.value);
+  if (isNaN(v)) { this.value = ''; return; }
+  if (v < 1) this.value = 1;
+  if (v > 99) this.value = 99;
+});
+
+/* ==============================
+   CLEAR ALL
+============================== */
+function clearAll() {
+  if (!confirm('Clear all entered data?')) return;
+  state.dates = ''; state.grade = ''; state.section = ''; state.subject = '';
+  state.element = ''; state.term = ''; state.week = ''; state.time = '';
+  state.teacher = ''; state.teacherPosition = ''; state.schoolHead = '';
+  state.schoolHeadPosition = ''; state.school = ''; state.competency = '';
+  document.getElementById('dateDisplay').textContent = 'Inclusive dates';
+  document.getElementById('dateDisplay').classList.remove('has-value');
+  document.getElementById('gradeDisplay').textContent = 'Select Grade Level';
+  document.getElementById('gradeDisplay').classList.remove('has-value');
+  document.getElementById('subjectDisplay').textContent = 'Input Learning Area here!';
+  document.getElementById('subjectDisplay').classList.remove('has-value');
+  document.getElementById('elementDisplay').textContent = 'Select Element here!';
+  document.getElementById('elementDisplay').classList.remove('has-value');
+  document.getElementById('subjectMenu').innerHTML = '';
+  document.getElementById('elementMenu').innerHTML = '';
+  ['sectionInput','termInput','weekInput','timeInput','teacherInput',
+   'teacherPositionInput','schoolHeadInput','schoolHeadPositionInput',
+   'schoolNameInput','competencyInput'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('startDate').value = '';
+  document.getElementById('endDate').value = '';
+  document.getElementById('formError').classList.remove('show');
+}
+
+/* ==============================
+   COLLECT FORM DATA
+============================== */
+function collectState() {
+  state.section = document.getElementById('sectionInput').value.trim();
+  state.term = document.getElementById('termInput').value.trim();
+  state.week = document.getElementById('weekInput').value.trim();
+  state.time = document.getElementById('timeInput').value.trim();
+  state.teacher = document.getElementById('teacherInput').value.trim();
+  state.teacherPosition = document.getElementById('teacherPositionInput').value.trim();
+  state.schoolHead = document.getElementById('schoolHeadInput').value.trim();
+  state.schoolHeadPosition = document.getElementById('schoolHeadPositionInput').value.trim();
+  state.school = document.getElementById('schoolNameInput').value.trim();
+  state.competency = document.getElementById('competencyInput').value.trim();
+}
+
+function validateForm() {
+  const apiKey = document.getElementById('apiKeyInput').value.trim();
+  const required = [
+    apiKey, state.dates, state.grade, state.section, state.subject,
+    state.term, state.week, state.teacher, state.school, state.competency
+  ];
+  return required.every(v => v && v.length > 0);
+}
+
+/* ==============================
+   GENERATE LP
+============================== */
+async function generateLP() {
+  collectState();
+  document.getElementById('formError').classList.remove('show');
+  if (!validateForm()) {
+    document.getElementById('formError').classList.add('show');
+    document.getElementById('formError').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  showLoading(true);
+  try {
+    const data = await callClaudeAPI();
+    state.generatedData = data;
+    renderLPTable(data);
+    document.getElementById('landingPage').style.display = 'none';
+    document.getElementById('lpTemplate').style.display = 'block';
+    window.scrollTo(0, 0);
+  } catch(e) {
+    alert('Error generating lesson plan: ' + e.message + '\n\nPlease try again.');
+    console.error(e);
+  } finally {
+    showLoading(false);
+  }
+}
+
+/* ==============================
+   CLAUDE API CALL
+============================== */
+async function callClaudeAPI() {
+  const elementNote = state.element ? ` | Element/Specialization: ${state.element}` : '';
+  const prompt = `You are an expert DepEd Philippines curriculum writer specializing in the Enhanced K to 10 ILAW (Integrated Learning Activities for the Week) Lesson Plan format. Generate a complete, detailed, creative, and educationally sound ILAW Lesson Plan in JSON format.
+
+TEACHER/SCHOOL CONTEXT:
+- Inclusive Dates: ${state.dates}
+- Grade Level: ${state.grade}
+- Section: ${state.section}
+- Learning Area: ${state.subject}${elementNote}
+- Term: ${state.term}
+- Week: ${state.week}
+- Time Schedule: ${state.time || 'Not specified'}
+- Teacher: ${state.teacher}
+- Teacher Position: ${state.teacherPosition || 'Teacher'}
+- School Head: ${state.schoolHead || 'Not specified'}
+- School Head Position: ${state.schoolHeadPosition || 'Principal'}
+- School: ${state.school}
+- Learning Competency: ${state.competency}
+
+Generate a JSON object with EXACTLY these keys. Each value must be a string (use \\n for line breaks within text). Sessions are numbered 1-4:
+
+{
+  "lessonName": "A creative, descriptive lesson name for this competency",
+  "references": "List of appropriate online references, books, websites, DepEd toolkits, and materials relevant to this subject and grade level",
+  "aiDeclaration": "This lesson plan was generated with the assistance of Kensanity AI ILAW LP Generator. The teacher reviewed, customized, and takes full responsibility for the content and implementation. AI-generated content was used as a framework and scaffold for professional pedagogical decision-making.",
+  "intentions_1": "Brief 2-3 sentence description of Session 1 learning and teaching activities",
+  "intentions_2": "Brief 2-3 sentence description of Session 2 learning and teaching activities",
+  "intentions_3": "Brief 2-3 sentence description of Session 3 learning and teaching activities",
+  "intentions_4": "Brief 2-3 sentence description of Session 4 learning and teaching activities",
+  "competencyStandards": "Full learning competency and curriculum standard as aligned with DepEd K-10 curriculum for this subject and grade level",
+  "objectives_1": "1. Knowledge: [knowledge objective]\\n2. Skills: [skills objective]\\n3. Attitude/Behavior: [attitude/behavioral objective]",
+  "objectives_2": "1. Knowledge: [knowledge objective]\\n2. Skills: [skills objective]\\n3. Attitude/Behavior: [attitude/behavioral objective]",
+  "objectives_3": "1. Knowledge: [knowledge objective]\\n2. Skills: [skills objective]\\n3. Attitude/Behavior: [attitude/behavioral objective]",
+  "objectives_4": "1. Knowledge: [knowledge objective]\\n2. Skills: [skills objective]\\n3. Attitude/Behavior: [attitude/behavioral objective]",
+  "learnerContext": "Positive, strength-based observation about the learners at this grade level. Describe their interests, positive learning behaviors, strengths, and possible barriers to learning with corresponding support strategies. Keep it affirming and professional.",
+  "learningExperience": "Overview of the learning experiences and activities for the week across all 4 sessions. Describe the pedagogical approach, learning modalities, and key experiences.",
+  "preLesson_1": "Teacher's dialogue for Session 1 pre-lesson/motivation activity. Write as if the teacher is speaking directly to students. Be creative and engaging. Include questions and student interaction cues. Minimum 80 words.",
+  "preLesson_2": "Teacher's dialogue for Session 2 pre-lesson/motivation activity. Different from Session 1. Minimum 80 words.",
+  "preLesson_3": "Teacher's dialogue for Session 3 pre-lesson/motivation activity. Different from Sessions 1-2. Minimum 80 words.",
+  "preLesson_4": "Teacher's dialogue for Session 4 pre-lesson/motivation activity. Different from Sessions 1-3. Minimum 80 words.",
+  "flow_1": "Detailed lesson flow/teaching procedure for Session 1. Write as teacher's script and activity guide. Include: establishing objectives, guided practice, checking understanding, collaborative activities, reflection prompts. Apply inclusive teaching. Minimum 120 words.",
+  "flow_2": "Detailed lesson flow/teaching procedure for Session 2. Different activities from Session 1. Minimum 120 words.",
+  "flow_3": "Detailed lesson flow/teaching procedure for Session 3. Different activities from Sessions 1-2. Minimum 120 words.",
+  "flow_4": "Detailed lesson flow/teaching procedure for Session 4. Different activities from Sessions 1-3. Minimum 120 words.",
+  "resources_1": "Learning resources for Session 1 (e.g., PowerPoint presentation, Smart TV, pictures, modules, charts, activity sheets, etc.)",
+  "resources_2": "Learning resources for Session 2 (different resources/materials appropriate to the session's activity)",
+  "resources_3": "Learning resources for Session 3 (different resources/materials appropriate to the session's activity)",
+  "resources_4": "Learning resources for Session 4 (different resources/materials appropriate to the session's activity)",
+  "integration_1": "Subject or topic integration opportunity for Session 1, or N/A",
+  "integration_2": "Subject or topic integration opportunity for Session 2, or N/A",
+  "integration_3": "Subject or topic integration opportunity for Session 3, or N/A",
+  "integration_4": "Subject or topic integration opportunity for Session 4, or N/A",
+  "assessment_1": "Description of the assessment for Session 1: what is assessed, how it connects to the competency, and its effectiveness",
+  "assessment_2": "Description of the assessment for Session 2: different from Session 1",
+  "assessment_3": "Description of the assessment for Session 3: different from Sessions 1-2",
+  "assessment_4": "Description of the assessment for Session 4: different from Sessions 1-3",
+  "formative_1": "Complete formative assessment tool for Session 1. Include full directions and 4-5 assessment items with choices/answers as appropriate to the subject and grade level. Be specific and creative.",
+  "formative_2": "Complete formative assessment tool for Session 2. Different type/format from Session 1.",
+  "formative_3": "Complete formative assessment tool for Session 3. Different type/format from Sessions 1-2.",
+  "formative_4": "Complete formative assessment tool for Session 4. Different type/format from Sessions 1-3.",
+  "waysForward_1": "Remediation and enrichment activities for Session 1. Include: specific remediation strategy for struggling learners, enrichment activity for advanced learners, and positive outcome indicators.",
+  "waysForward_2": "Remediation and enrichment activities for Session 2. Different from Session 1.",
+  "waysForward_3": "Remediation and enrichment activities for Session 3. Different from Sessions 1-2.",
+  "waysForward_4": "Remediation and enrichment activities for Session 4. Different from Sessions 1-3.",
+  "extended_1": "Extended learning opportunity for Session 1: activities outside classroom to reinforce learning, spark curiosity, or provide support",
+  "extended_2": "Extended learning opportunity for Session 2: different suggestions",
+  "extended_3": "Extended learning opportunity for Session 3: different suggestions",
+  "extended_4": "Extended learning opportunity for Session 4: different suggestions",
+  "reflection_1": "Teacher's reflection for Session 1: what changes would make learning more meaningful, what was observed, and how to make the next activity more engaging",
+  "reflection_2": "Teacher's reflection for Session 2: different reflection points",
+  "reflection_3": "Teacher's reflection for Session 3: different reflection points",
+  "reflection_4": "Teacher's reflection for Session 4: different reflection points"
+}
+
+IMPORTANT: Return ONLY valid JSON. No markdown, no backticks, no preamble. All text values must be properly escaped strings.`;
+
+  const apiKey = document.getElementById('apiKeyInput').value.trim();
+  if (!apiKey) {
+    throw new Error('Please enter your Anthropic API key at the top of the form.');
+  }
+
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 16000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(err.error?.message || 'API request failed');
+  }
+  const result = await response.json();
+
+  // Flag truncated responses early with a clear message
+  if (result.stop_reason === 'max_tokens') {
+    throw new Error('The AI response was cut off because it ran out of room. Try simplifying the Learning Competency text, or click Generate again.');
+  }
+
+  const text = result.content.map(b => b.text || '').join('');
+  return parseAIJson(text);
+}
+
+/* ==============================
+   ROBUST JSON PARSER
+   Handles truncated / malformed JSON from the AI response
+============================== */
+function parseAIJson(rawText) {
+  let clean = rawText.replace(/```json|```/g, '').trim();
+
+  // Try a direct parse first
+  try {
+    return JSON.parse(clean);
+  } catch (firstErr) {
+    console.warn('Initial JSON.parse failed, attempting repair...', firstErr.message);
+  }
+
+  // Attempt repair: close unterminated strings/objects if the response was truncated
+  let repaired = clean;
+
+  // Count unescaped quotes to detect an unterminated string at the very end
+  const quoteCount = (repaired.match(/(?<!\\)"/g) || []).length;
+  if (quoteCount % 2 !== 0) {
+    repaired += '"';
+  }
+
+  // Trim any trailing comma before we close brackets
+  repaired = repaired.replace(/,\s*$/, '');
+
+  // Balance braces/brackets that were never closed because generation stopped early
+  const openBraces = (repaired.match(/{/g) || []).length;
+  const closeBraces = (repaired.match(/}/g) || []).length;
+  const openBrackets = (repaired.match(/\[/g) || []).length;
+  const closeBrackets = (repaired.match(/\]/g) || []).length;
+
+  for (let i = 0; i < (openBrackets - closeBrackets); i++) repaired += ']';
+  for (let i = 0; i < (openBraces - closeBraces); i++) repaired += '}';
+
+  try {
+    return JSON.parse(repaired);
+  } catch (secondErr) {
+    console.warn('Repair attempt failed, trying truncate-to-last-valid-key...', secondErr.message);
+  }
+
+  // Last resort: cut back to the last fully-closed "key": "value" pair and close the object
+  const lastGoodComma = clean.lastIndexOf('",');
+  if (lastGoodComma > 0) {
+    let truncated = clean.substring(0, lastGoodComma + 1);
+    truncated = truncated.replace(/,\s*$/, '');
+    const ob = (truncated.match(/{/g) || []).length;
+    const cb = (truncated.match(/}/g) || []).length;
+    for (let i = 0; i < (ob - cb); i++) truncated += '}';
+    try {
+      const partial = JSON.parse(truncated);
+      console.warn('Recovered a partial lesson plan; some fields may be missing.');
+      return fillMissingFields(partial);
+    } catch (thirdErr) {
+      console.error('All JSON repair attempts failed.', thirdErr.message);
+    }
+  }
+
+  throw new Error('The AI returned an incomplete response that could not be parsed. Please click Generate again.');
+}
+
+/* Fills any missing expected fields with a placeholder so the table still renders */
+function fillMissingFields(partial) {
+  const expectedKeys = [
+    'lessonName','references','aiDeclaration',
+    'intentions_1','intentions_2','intentions_3','intentions_4',
+    'competencyStandards',
+    'objectives_1','objectives_2','objectives_3','objectives_4',
+    'learnerContext','learningExperience',
+    'preLesson_1','preLesson_2','preLesson_3','preLesson_4',
+    'flow_1','flow_2','flow_3','flow_4',
+    'resources_1','resources_2','resources_3','resources_4',
+    'integration_1','integration_2','integration_3','integration_4',
+    'assessment_1','assessment_2','assessment_3','assessment_4',
+    'formative_1','formative_2','formative_3','formative_4',
+    'waysForward_1','waysForward_2','waysForward_3','waysForward_4',
+    'extended_1','extended_2','extended_3','extended_4',
+    'reflection_1','reflection_2','reflection_3','reflection_4'
+  ];
+  expectedKeys.forEach(k => {
+    if (!partial[k]) partial[k] = '[Content was truncated — click Regenerate to fill this in]';
+  });
+  return partial;
+}
+
+/* ==============================
+   RENDER TABLE
+============================== */
+function renderLPTable(d) {
+  const gradeSection = `${state.grade} ${state.section}`.trim();
+  const subjectFull = state.element && state.element !== 'Not Applicable'
+    ? `${state.subject} | ${state.element}` : state.subject;
+
+  const SG = '#708090'; // slate gray
+  const s = (txt) => `<td class="data-cell">${(txt||'').replace(/\n/g,'<br>')}</td>`;
+  const sc = (txt) => `<td class="data-cell" colspan="4">${(txt||'').replace(/\n/g,'<br>')}</td>`;
+  const hc = (txt) => `<td class="col-header">${txt}</td>`;
+
+  const table = document.getElementById('lpTable');
+  table.innerHTML = `
+    <!-- Row 1: Lesson Name -->
+    <tr><${hc('Lesson Name')}${sc(d.lessonName)}</tr>
+    <!-- Row 2: Learning Area -->
+    <tr>${hc('Learning Area')}${sc(subjectFull)}</tr>
+    <!-- Row 3: Term -->
+    <tr>${hc('Term')}${sc('Term ' + state.term)}</tr>
+    <!-- Row 4: Week -->
+    <tr>${hc('Week')}${sc('Week ' + state.week)}</tr>
+    <!-- Row 5: Grade & Section -->
+    <tr>${hc('Grade Level and Section')}${sc(gradeSection)}</tr>
+    <!-- Row 6: Teacher -->
+    <tr>${hc('Name of Teacher')}${sc(state.teacher + (state.teacherPosition ? ' | ' + state.teacherPosition : ''))}</tr>
+    <!-- Row 7: Session Headers -->
+    <tr class="session-header">
+      <th class="col-header">No. of Sessions</th>
+      <th>Session 1</th>
+      <th>Session 2</th>
+      <th>Session 3</th>
+      <th>Session 4</th>
+    </tr>
+    <!-- Row 8: References -->
+    <tr>${hc('References')}${sc(d.references)}</tr>
+    <!-- Row 9: AI Declaration -->
+    <tr>${hc('Declaration of AI Use')}${sc(d.aiDeclaration)}</tr>
+    <!-- Row 10: INTENTIONS MAJOR HEADER -->
+    <tr class="major-header"><td colspan="5" style="background:#708090;color:#fff;font-weight:bold;font-size:10pt;text-align:center;letter-spacing:1px;">INTENTIONS</td></tr>
+    <!-- Row 10b: Intentions per session -->
+    <tr>${hc('Intentions')}${s(d.intentions_1)}${s(d.intentions_2)}${s(d.intentions_3)}${s(d.intentions_4)}</tr>
+    <!-- Row 11: Competency (merged) -->
+    <tr>${hc('Learning Competency & Curriculum Standards')}${sc(d.competencyStandards)}</tr>
+    <!-- Row 12: Objectives per session -->
+    <tr>${hc('Learning Objectives (KSA)')}${s(d.objectives_1)}${s(d.objectives_2)}${s(d.objectives_3)}${s(d.objectives_4)}</tr>
+    <!-- Row 13: Learner Context (merged) -->
+    <tr>${hc('Learner Context')}${sc(d.learnerContext)}</tr>
+    <!-- LEARNING EXPERIENCES MAJOR HEADER -->
+    <tr class="major-header"><td colspan="5" style="background:#708090;color:#fff;font-weight:bold;font-size:10pt;text-align:center;letter-spacing:1px;">LEARNING EXPERIENCES</td></tr>
+    <!-- Row 14: Learning Experience (merged) -->
+    <tr>${hc('Learning Experience')}${sc(d.learningExperience)}</tr>
+    <!-- Row 15: Pre-Lesson per session -->
+    <tr>${hc('Pre-Lesson')}${s(d.preLesson_1)}${s(d.preLesson_2)}${s(d.preLesson_3)}${s(d.preLesson_4)}</tr>
+    <!-- Row 16: Flow per session -->
+    <tr>${hc('Flow (Lesson Proper)')}${s(d.flow_1)}${s(d.flow_2)}${s(d.flow_3)}${s(d.flow_4)}</tr>
+    <!-- Row 17: Resources per session -->
+    <tr>${hc('Learning Resources')}${s(d.resources_1)}${s(d.resources_2)}${s(d.resources_3)}${s(d.resources_4)}</tr>
+    <!-- Row 18: Integration per session -->
+    <tr>${hc('Opportunities for Integration')}${s(d.integration_1)}${s(d.integration_2)}${s(d.integration_3)}${s(d.integration_4)}</tr>
+    <!-- ASSESSMENT MAJOR HEADER -->
+    <tr class="major-header"><td colspan="5" style="background:#708090;color:#fff;font-weight:bold;font-size:10pt;text-align:center;letter-spacing:1px;">ASSESSMENT</td></tr>
+    <!-- Row 19: Assessment description per session -->
+    <tr>${hc('Assessment')}${s(d.assessment_1)}${s(d.assessment_2)}${s(d.assessment_3)}${s(d.assessment_4)}</tr>
+    <!-- Row 20: Formative per session -->
+    <tr>${hc('Formative Assessment')}${s(d.formative_1)}${s(d.formative_2)}${s(d.formative_3)}${s(d.formative_4)}</tr>
+    <!-- WAYS FORWARD MAJOR HEADER -->
+    <tr class="major-header"><td colspan="5" style="background:#708090;color:#fff;font-weight:bold;font-size:10pt;text-align:center;letter-spacing:1px;">WAYS FORWARD</td></tr>
+    <!-- Row 21: Ways Forward per session -->
+    <tr>${hc('Ways Forward')}${s(d.waysForward_1)}${s(d.waysForward_2)}${s(d.waysForward_3)}${s(d.waysForward_4)}</tr>
+    <!-- Row 22: Extended Learning per session -->
+    <tr>${hc('Extended Learning Opportunities')}${s(d.extended_1)}${s(d.extended_2)}${s(d.extended_3)}${s(d.extended_4)}</tr>
+    <!-- Row 23: Reflections per session -->
+    <tr>${hc('Reflections')}${s(d.reflection_1)}${s(d.reflection_2)}${s(d.reflection_3)}${s(d.reflection_4)}</tr>
+    <!-- Signatories Row -->
+    <tr>
+      <td class="col-header">Prepared by:</td>
+      <td class="data-cell" colspan="2">
+        <strong>${state.teacher}</strong><br>
+        ${state.teacherPosition || 'Teacher'}<br>
+        <em>${state.school}</em>
+      </td>
+      <td class="col-header">Checked by:</td>
+      <td class="data-cell">
+        <strong>${state.schoolHead || '___________________'}</strong><br>
+        ${state.schoolHeadPosition || 'Principal'}<br>
+        <em>${state.school}</em>
+      </td>
+    </tr>
+    <!-- Inclusive Dates row -->
+    <tr>
+      <td class="col-header">Inclusive Dates:</td>
+      <td class="data-cell" colspan="4">${state.dates} | Time: ${state.time || 'N/A'} | Week ${state.week} | Term ${state.term}</td>
+    </tr>
+  `;
+}
+
+/* ==============================
+   NAVIGATION
+============================== */
+function goBack() {
+  document.getElementById('lpTemplate').style.display = 'none';
+  document.getElementById('landingPage').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+async function regenLP() {
+  if (!confirm('Regenerate the ILAW Lesson Plan? This will replace the current content.')) return;
+  showLoading(true);
+  try {
+    const data = await callClaudeAPI();
+    state.generatedData = data;
+    renderLPTable(data);
+    window.scrollTo(0, 0);
+  } catch(e) {
+    alert('Error regenerating: ' + e.message);
+  } finally {
+    showLoading(false);
+  }
+}
+
+function exitApp() {
+  if (confirm('Exit the Kensanity AI ILAW LP Generator?')) {
+    window.close();
+    document.body.innerHTML = `<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#0D0D1A;color:#fff;font-family:Arial;text-align:center;padding:20px;"><div><div style="font-size:2rem;margin-bottom:12px;">✅</div><div style="font-size:1.1rem;">Thank you for using<br><strong style="color:#39FF14;">Kensanity AI ILAW LP Generator</strong></div><div style="margin-top:10px;color:#aaa;font-size:0.8rem;">©Kensanity AI 2026 | All rights reserved</div></div></div>`;
+  }
+}
+
+/* ==============================
+   LOADING
+============================== */
+function showLoading(show) {
+  document.getElementById('loadingOverlay').classList.toggle('open', show);
+}
+
+/* ==============================
+   SAVE OPTIONS
+============================== */
+function showSaveOptions(e) {
+  e.stopPropagation();
+  const dropdown = document.getElementById('saveDropdown');
+  const btn = e.currentTarget;
+  const rect = btn.getBoundingClientRect();
+  dropdown.style.top = (rect.bottom + 6 + window.scrollY) + 'px';
+  dropdown.style.left = rect.left + 'px';
+  dropdown.classList.toggle('open');
+}
+
+function saveAs(format) {
+  document.getElementById('saveDropdown').classList.remove('open');
+  if (format === 'pdf') {
+    savePDF();
+  } else if (format === 'xlsx') {
+    saveExcelHint();
+  } else if (format === 'docx') {
+    saveWordHint();
+  }
+}
+
+function savePDF() {
+  const table = document.getElementById('lpTable');
+  if (!table) { alert('No lesson plan to save.'); return; }
+  const w = window.open('', '_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <title>ILAW LP - ${state.teacher}</title>
+  <style>
+    @page { size: A4 landscape; margin: 1.5cm 1.5cm 1.5cm 1.5cm; }
+    body { font-family: Arial Narrow, Arial, sans-serif; font-size: 9pt; margin: 0; }
+    h2 { font-family: Arial, sans-serif; font-size: 12pt; font-weight: bold; text-align: center; margin-bottom: 10px; }
+    table { border-collapse: collapse; width: 100%; }
+    td, th { border: 1px solid #000; padding: 4px 6px; vertical-align: top; font-family: Arial Narrow, Arial, sans-serif; font-size: 9pt; }
+    .col-header { background-color: #708090 !important; color: #fff; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .major-header td { background-color: #708090 !important; color: #fff; font-weight: bold; font-size: 10pt; text-align: center; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  </style></head><body>
+  <h2>DEPED LESSON PLAN | ILAW Format<br>Enhanced K to 10 Curriculum | Three-Terms</h2>
+  ${table.outerHTML}
+  <script>window.onload=function(){window.print();}<\/script>
+  </body></html>`);
+  w.document.close();
+}
+
+function saveExcelHint() {
+  alert('💡 Excel Export Tip:\n\nTo save as Excel (.xlsx):\n1. Use the PDF option to open a printable version\n2. Copy the table and paste into Excel\n\nFor best results, we recommend using the PDF save option, then converting to Excel using an online tool like ilovepdf.com or smallpdf.com.\n\nThis app works fully offline once loaded.');
+}
+
+function saveWordHint() {
+  const table = document.getElementById('lpTable');
+  if (!table) { alert('No lesson plan to save.'); return; }
+  const w = window.open('', '_blank');
+  w.document.write(`<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
+  <head><meta charset="UTF-8"><title>ILAW LP</title>
+  <style>
+    body { font-family: Arial Narrow, Arial, sans-serif; font-size: 9pt; }
+    h2 { font-family: Arial, sans-serif; font-size: 12pt; font-weight: bold; text-align: center; }
+    table { border-collapse: collapse; width: 100%; }
+    td, th { border: 1px solid #000; padding: 4px 6px; vertical-align: top; font-size: 9pt; }
+    .col-header { background-color: #708090; color: #fff; font-weight: bold; }
+  </style></head><body>
+  <h2>DEPED LESSON PLAN | ILAW Format<br>Enhanced K to 10 Curriculum | Three-Terms</h2>
+  ${table.outerHTML}
+  </body></html>`);
+  w.document.close();
+  alert('Word-compatible HTML opened in new tab. Use File > Save As > .doc in your browser/Word to save.');
+}
+
+/* ==============================
+   API KEY VISIBILITY TOGGLE
+============================== */
+function toggleApiKeyVisibility() {
+  const input = document.getElementById('apiKeyInput');
+  const btn = document.getElementById('apiKeyToggle');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁';
+  }
+}
+</script>
+</body>
+</html>
