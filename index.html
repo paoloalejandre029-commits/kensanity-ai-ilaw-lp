@@ -121,6 +121,79 @@
             font-style: italic;
         }
 
+        /* Time Picker Row Styles */
+        .time-picker-wrapper {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--indigo);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .time-picker-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .time-picker-block {
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .time-select-group {
+            display: flex;
+            gap: 4px;
+        }
+
+        .time-select-group select {
+            padding: 8px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .btn-add-time {
+            background-color: var(--teal);
+            color: white;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            height: 40px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .btn-add-time:hover {
+            box-shadow: 0 0 8px var(--teal);
+        }
+
+        .time-tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .time-tag {
+            background: var(--indigo);
+            border: 1px solid var(--light-violet);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .time-tag span {
+            cursor: pointer;
+            color: var(--fuchsia);
+            font-weight: bold;
+        }
+
         .checkbox-group {
             background: rgba(255, 255, 255, 0.05);
             padding: 15px;
@@ -217,7 +290,6 @@
             max-width: 750px;
             max-height: 85vh;
             display: flex;
-            flex-direction: center;
             flex-direction: column;
             overflow: hidden;
             box-shadow: 0 0 25px var(--fuchsia);
@@ -284,13 +356,11 @@
 
     <form id="promptForm" onsubmit="event.preventDefault();">
         
-        <!-- Teacher Name -->
         <div class="form-group">
             <label for="teacherName">Teacher's Name</label>
             <input type="text" id="teacherName" placeholder="Teacher's Name">
         </div>
 
-        <!-- Grade Level -->
         <div class="form-group">
             <label for="gradeLevel">Grade Level</label>
             <select id="gradeLevel">
@@ -304,13 +374,11 @@
             </select>
         </div>
 
-        <!-- Section Name -->
         <div class="form-group">
             <label for="sectionName">Section Name</label>
             <input type="text" id="sectionName" placeholder="Enter Section here!">
         </div>
 
-        <!-- Teacher Position -->
         <div class="form-group">
             <label for="teacherPosition">Teacher's Position</label>
             <select id="teacherPosition">
@@ -330,7 +398,6 @@
             </select>
         </div>
 
-        <!-- School Year -->
         <div class="form-group">
             <label for="schoolYear">School Year</label>
             <select id="schoolYear">
@@ -346,13 +413,11 @@
             </select>
         </div>
 
-        <!-- School Head Name -->
         <div class="form-group">
             <label for="schoolHead">School Head's Name</label>
             <input type="text" id="schoolHead" placeholder="Enter name of school head here!">
         </div>
 
-        <!-- School Head Position -->
         <div class="form-group">
             <label for="headPosition">School Head's Position</label>
             <select id="headPosition">
@@ -368,7 +433,6 @@
             </select>
         </div>
 
-        <!-- Inclusive Dates -->
         <div class="form-group">
             <label>Inclusive Dates of the Lesson Plan</label>
             <div class="date-range-container">
@@ -379,13 +443,11 @@
             <div id="dateDisplay" class="date-display">Enter inclusive dates of the Lesson Plan!</div>
         </div>
 
-        <!-- School Name -->
         <div class="form-group">
             <label for="schoolName">School Name</label>
             <input type="text" id="schoolName" placeholder="Enter School Name here!">
         </div>
 
-        <!-- Learning Area -->
         <div class="form-group">
             <label for="learningArea">Learning Area/Subject</label>
             <select id="learningArea" onchange="handleAreaChange()">
@@ -405,7 +467,6 @@
             </select>
         </div>
 
-        <!-- Element Selection -->
         <div class="form-group" id="elementContainer" style="display: none;">
             <label for="elementSelect">Element</label>
             <select id="elementSelect">
@@ -413,7 +474,6 @@
             </select>
         </div>
 
-        <!-- Term Selection -->
         <div class="form-group">
             <label for="termSelect">Term</label>
             <select id="termSelect">
@@ -424,7 +484,6 @@
             </select>
         </div>
 
-        <!-- Week Selection -->
         <div class="form-group">
             <label for="weekSelect">Week</label>
             <select id="weekSelect">
@@ -437,18 +496,49 @@
             </select>
         </div>
 
-        <!-- Subject Time Schedule -->
         <div class="form-group">
-            <label for="timeSchedule">Subject's Time Schedule</label>
-            <select id="timeSchedule">
-                <option value="" disabled selected>Select Subject's Time Schedule here!</option>
-                <option value="Term 1">Term 1</option>
-                <option value="Term 2">Term 2</option>
-                <option value="Term 3">Term 3</option>
-            </select>
+            <label>Subject's Time Schedule</label>
+            <div class="time-picker-wrapper">
+                <div class="time-picker-row">
+                    <div class="time-picker-block">
+                        <span style="font-size:0.8rem; display:block; margin-bottom:4px; color:var(--teal)">From:</span>
+                        <div class="time-select-group">
+                            <select id="startHour">
+                                <script>for(let h=1; h<=12; h++) document.write(`<option value="${h.toString().padStart(2,'0')}">${h.toString().padStart(2,'0')}</option>`);</script>
+                            </select>
+                            <select id="startMin">
+                                <script>for(let m=0; m<60; m+=5) document.write(`<option value="${m.toString().padStart(2,'0')}">${m.toString().padStart(2,'0')}</option>`);</script>
+                            </select>
+                            <select id="startAmpm">
+                                <option value="AM">AM</option>
+                                <option value="PM">PM</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="time-picker-block">
+                        <span style="font-size:0.8rem; display:block; margin-bottom:4px; color:var(--fuchsia)">To:</span>
+                        <div class="time-select-group">
+                            <select id="endHour">
+                                <script>for(let h=1; h<=12; h++) document.write(`<option value="${h.toString().padStart(2,'0')}">${h.toString().padStart(2,'0')}</option>`);</script>
+                            </select>
+                            <select id="endMin">
+                                <script>for(let m=0; m<60; m+=5) document.write(`<option value="${m.toString().padStart(2,'0')}">${m.toString().padStart(2,'0')}</option>`);</script>
+                            </select>
+                            <select id="endAmpm">
+                                <option value="AM">AM</option>
+                                <option value="PM" selected>PM</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-add-time" onclick="addTimeSchedule()">Add Time</button>
+                </div>
+
+                <div id="timeTagsContainer" class="time-tags-container"></div>
+            </div>
         </div>
 
-        <!-- Learner Strengths -->
         <div class="form-group">
             <label>Learner Strengths (Select multiple if applicable)</label>
             <div class="checkbox-group" id="strengthsGroup">
@@ -462,7 +552,6 @@
             </div>
         </div>
 
-        <!-- Barriers to Learning -->
         <div class="form-group">
             <label>Possible Barriers to Learning (Select multiple if applicable)</label>
             <div class="checkbox-group" id="barriersGroup">
@@ -475,9 +564,8 @@
             </div>
         </div>
 
-        <!-- Learners Interest -->
         <div class="form-group">
-            <label>Learners' Interest (Select multiple if applicable)</label>
+            <label>Navigating Learners' Interest (Select multiple if applicable)</label>
             <div class="checkbox-group" id="interestsGroup">
                 <label class="checkbox-item"><input type="checkbox" value="Interactive digital games and gamified quizzes"> Interactive digital games and gamified quizzes</label>
                 <label class="checkbox-item"><input type="checkbox" value="Storytelling, legends, and colorful picture books"> Storytelling, legends, and colorful picture books</label>
@@ -488,7 +576,6 @@
             </div>
         </div>
 
-        <!-- Teaching Framework -->
         <div class="form-group">
             <label for="frameworkSelect">Teaching Framework</label>
             <select id="frameworkSelect">
@@ -501,7 +588,6 @@
             </select>
         </div>
 
-        <!-- Action Buttons -->
         <div class="btn-container">
             <button type="button" class="btn-generate" onclick="generatePrompt()">Generate AI ILAW LP Prompts</button>
             <button type="button" class="btn-clear" onclick="clearForm()">Clear</button>
@@ -509,7 +595,6 @@
     </form>
 </div>
 
-<!-- Modal Dialog Box -->
 <div class="modal-overlay" id="promptModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -527,6 +612,8 @@
 </div>
 
 <script>
+    let dynamicTimeSchedules = [];
+
     function handleAreaChange() {
         const area = document.getElementById('learningArea').value;
         const container = document.getElementById('elementContainer');
@@ -562,6 +649,39 @@
         }
     }
 
+    function addTimeSchedule() {
+        const sh = document.getElementById('startHour').value;
+        const sm = document.getElementById('startMin').value;
+        const sa = document.getElementById('startAmpm').value;
+        const eh = document.getElementById('endHour').value;
+        const em = document.getElementById('endMin').value;
+        const ea = document.getElementById('endAmpm').value;
+
+        const timestampStr = `${sh}:${sm} ${sa} - ${eh}:${em} ${ea}`;
+        
+        if(!dynamicTimeSchedules.includes(timestampStr)) {
+            dynamicTimeSchedules.push(timestampStr);
+            renderTimeTags();
+        }
+    }
+
+    function removeTimeSchedule(index) {
+        dynamicTimeSchedules.splice(index, 1);
+        renderTimeTags();
+    }
+
+    function renderTimeTags() {
+        const container = document.getElementById('timeTagsContainer');
+        container.innerHTML = '';
+        dynamicTimeSchedules.forEach((time, index) => {
+            container.innerHTML += `
+                <div class="time-tag">
+                    ${time} <span onclick="removeTimeSchedule(${index})">&times;</span>
+                </div>
+            `;
+        });
+    }
+
     function getSelectedCheckboxes(groupId) {
         const checked = [];
         document.querySelectorAll(`#${groupId} input:checked`).forEach(cb => {
@@ -587,7 +707,9 @@
         
         const term = document.getElementById('termSelect').value || "[Term]";
         const week = document.getElementById('weekSelect').value || "[Week]";
-        const timeSchedule = document.getElementById('timeSchedule').value || "[Time Schedule]";
+        
+        // Resolve dynamic list schedules or standard string replacement
+        const timeScheduleStr = dynamicTimeSchedules.length > 0 ? dynamicTimeSchedules.join(', ') : "[No schedule sessions appended]";
         
         const strengths = getSelectedCheckboxes('strengthsGroup');
         const barriers = getSelectedCheckboxes('barriersGroup');
@@ -601,7 +723,7 @@
 - Teacher Name: ${teacherName} (${teacherPos})
 - Grade Level & Section: ${gradeLevel} - ${sectionName}
 - Learning Area / Subject: ${learningArea}
-${elementText}- Term context: ${term} | Schedule Sequence: ${timeSchedule}
+${elementText}- Term context: ${term} | Schedule Timestamps Block: ${timeScheduleStr}
 - Implementation Scope: ${week}
 - Inclusive Tracking Dates: ${dateRange}
 - Approving Authority: ${schoolHead} (${headPosition})
@@ -672,6 +794,8 @@ Detailed Segment Design Paradigms:
         document.getElementById('promptForm').reset();
         document.getElementById('elementContainer').style.display = 'none';
         document.getElementById('dateDisplay').innerText = "Enter inclusive dates of the Lesson Plan!";
+        dynamicTimeSchedules = [];
+        renderTimeTags();
         
         // Focus back to teacher's name
         document.getElementById('teacherName').focus();
