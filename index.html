@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KENSANITY ILAW LP AI PROMPT GENERATOR</title>
+    <title>KENSANITY AI ILAW LP PROMPT GENERATOR</title>
     <style>
         :root {
-            --heavy-orange: #FF5E14;
-            --deep-violet: #2D1442;
-            --light-teal: #24C1B6;
-            --fuchsia-pink: #E91E63;
-            --neon-green: #39FF14;
-            --dark-gray: #4A4A4A;
-            --light-gray: #F2F2F2;
-            --border-radius: 12px;
+            --orange: #FF6B35;
+            --teal: #00A896;
+            --neon-green: #70E000;
+            --fuchsia: #F72585;
+            --indigo: #3A0CA3;
+            --light-violet: #E0AAFF;
+            --dark-bg: #120924;
+            --card-bg: #1A0F30;
+            --text-light: #F4F1DE;
         }
 
         * {
@@ -24,8 +25,8 @@
         }
 
         body {
-            background-color: var(--deep-violet);
-            color: #FFFFFF;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
             padding: 20px;
             display: flex;
             justify-content: center;
@@ -34,359 +35,266 @@
         }
 
         .container {
-            background-color: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--heavy-orange);
-            border-radius: 20px;
-            padding: 30px;
             width: 100%;
             max-width: 800px;
+            background: var(--card-bg);
+            border: 3px solid var(--indigo);
+            border-radius: 20px;
+            padding: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        header {
+        .header-box {
+            border: 4px solid var(--fuchsia);
+            border-radius: 15px;
+            padding: 15px;
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--light-teal);
-            padding-bottom: 20px;
+            background: linear-gradient(135deg, var(--indigo), #240046);
+            margin-bottom: 10px;
         }
 
-        header h1 {
-            color: var(--heavy-orange);
-            font-size: 2rem;
-            letter-spacing: 2px;
-            font-weight: 800;
-        }
-
-        header h2 {
-            color: var(--light-teal);
-            font-size: 1.5rem;
-            margin: 5px 0;
-        }
-
-        header p {
-            color: var(--fuchsia-pink);
-            font-size: 1.1rem;
+        .header-box h1 {
+            color: var(--neon-green);
+            font-size: 1.8rem;
             font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .sub-header {
+            text-align: center;
+            font-weight: bold;
+            color: var(--orange);
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
 
         .form-group {
             margin-bottom: 20px;
-            position: relative;
         }
 
-        .label-desc {
-            font-size: 0.85rem;
-            color: var(--light-teal);
-            margin-bottom: 5px;
+        label {
             display: block;
+            margin-bottom: 8px;
+            color: var(--light-violet);
             font-weight: 600;
+            font-size: 0.95rem;
         }
 
-        .placeholder-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            background-color: #FFFFFF;
-            border-radius: var(--border-radius);
-            padding: 2px;
-        }
-
-        .input-control {
+        input[type="text"], select, input[type="date"] {
             width: 100%;
-            padding: 14px 16px;
-            border: 2px solid transparent;
-            border-radius: var(--border-radius);
-            background-color: #FFFFFF;
-            color: var(--dark-gray);
+            padding: 12px;
+            border: 2px solid var(--teal);
+            background-color: rgba(0, 168, 150, 0.1);
+            color: #fff;
+            border-radius: 8px;
             font-size: 1rem;
-            outline: none;
             transition: all 0.3s ease;
         }
 
-        .input-control:focus {
-            border-color: var(--heavy-orange);
-        }
-
-        .input-control::placeholder {
+        input::placeholder {
             font-style: italic;
-            color: #A0A0A0;
+            color: #a0a0a0;
         }
 
-        select.input-control {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%234A4A4A'><polygon points='0,0 10,0 5,5'/></svg>");
-            background-repeat: no-repeat;
-            background-position: right 15px center;
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--fuchsia);
+            box-shadow: 0 0 8px var(--fuchsia);
         }
 
-        .input-control:disabled {
-            background-color: #D3D3D3;
-            color: #7A7A7A;
-            cursor: not-allowed;
-            font-style: italic;
-        }
-
-        /* Date & Time Picker Custom Styles */
-        .picker-container {
+        .date-range-container {
             display: flex;
             gap: 10px;
-            padding: 10px;
-            background: #FFFFFF;
-            width: 100%;
-            border-radius: var(--border-radius);
+            align-items: center;
         }
 
-        .picker-container input[type="date"], 
-        .picker-container input[type="time"] {
-            border: 1px solid var(--light-teal);
-            border-radius: 6px;
-            padding: 8px;
-            color: var(--dark-gray);
-            font-weight: 600;
+        .date-range-container input {
+            flex: 1;
         }
 
-        /* Multiselect Checkbox Dropdown */
-        .checkbox-dropdown {
-            background: #FFFFFF;
-            color: var(--dark-gray);
-            border-radius: var(--border-radius);
-            padding: 14px 16px;
-            cursor: pointer;
-            position: relative;
+        .date-display {
+            margin-top: 5px;
+            font-size: 0.85rem;
+            color: var(--neon-green);
             font-style: italic;
-            color: #A0A0A0;
-            user-select: none;
         }
 
-        .checkbox-dropdown.has-values {
-            font-style: normal;
-            color: var(--dark-gray);
-        }
-
-        .checkbox-content {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: #FFFFFF;
-            border: 2px solid var(--light-teal);
-            border-radius: var(--border-radius);
-            max-height: 300px;
-            overflow-y: auto;
-            z-index: 10;
+        .checkbox-group {
+            background: rgba(255, 255, 255, 0.05);
             padding: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            border: 1px solid var(--indigo);
+            max-height: 180px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
         }
 
-        .checkbox-content h4 {
-            font-weight: bold;
-            font-style: italic;
-            color: var(--deep-violet);
-            margin: 10px 0 5px 0;
-            border-bottom: 1px solid #EEE;
-            padding-bottom: 2px;
+        @media (min-width: 600px) {
+            .checkbox-group {
+                grid-template-columns: 1fr 1fr;
+            }
         }
-
-        .checkbox-content h4:first-child { margin-top: 0; }
 
         .checkbox-item {
             display: flex;
             align-items: center;
-            margin: 8px 0;
-            color: var(--dark-gray);
-            font-style: normal;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
         }
 
         .checkbox-item input {
-            margin-right: 10px;
-            transform: scale(1.2);
-            accent-color: var(--fuchsia-pink);
+            accent-color: var(--fuchsia);
+            width: 16px;
+            height: 16px;
         }
 
-        /* Time Schedules List Badge Display */
-        .time-badge-container {
+        .btn-container {
             display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-top: 8px;
+            gap: 15px;
+            margin-top: 30px;
         }
-        .time-badge {
-            background-color: var(--fuchsia-pink);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .time-badge span {
-            cursor: pointer;
+
+        button {
+            flex: 1;
+            padding: 15px;
+            font-size: 1rem;
             font-weight: bold;
-        }
-
-        /* Generate Button */
-        .btn-generate {
-            width: 100%;
-            background-color: var(--neon-green);
-            color: var(--deep-violet);
             border: none;
-            padding: 18px;
-            border-radius: var(--border-radius);
-            font-size: 1.3rem;
-            font-weight: bold;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
-            margin-top: 20px;
-            text-transform: uppercase;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-generate {
+            background-color: var(--orange);
+            color: white;
         }
 
         .btn-generate:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 25px rgba(57, 255, 20, 0.8);
+            opacity: 0.9;
+            box-shadow: 0 0 12px var(--orange);
         }
 
-        /* Output Prompt Container */
-        .output-container {
-            margin-top: 30px;
-            background: #FFFFFF;
-            color: var(--dark-gray);
-            border-radius: var(--border-radius);
-            padding: 20px;
+        .btn-clear {
+            background-color: transparent;
+            color: var(--light-violet);
+            border: 2px solid var(--light-violet);
+        }
+
+        .btn-clear:hover {
+            background: rgba(224, 170, 255, 0.1);
+        }
+
+        /* Modal Settings */
+        .modal-overlay {
             display: none;
-            border: 3px solid var(--light-teal);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
-        .output-header {
+        .modal-content {
+            background: var(--card-bg);
+            border: 3px solid var(--fuchsia);
+            border-radius: 15px;
+            width: 100%;
+            max-width: 750px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: center;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 25px var(--fuchsia);
+        }
+
+        .modal-header {
+            padding: 15px;
+            background: var(--indigo);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--light-gray);
-            padding-bottom: 10px;
+            border-bottom: 2px solid var(--fuchsia);
         }
 
-        .output-header h3 {
-            color: var(--deep-violet);
+        .modal-header h2 {
+            color: var(--neon-green);
+            font-size: 1.3rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+            background: #0f071e;
+        }
+
+        .prompt-text {
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            color: #e0d0ff;
+            line-height: 1.5;
+        }
+
+        .modal-footer {
+            padding: 15px;
+            background: var(--card-bg);
+            border-top: 1px solid #331a5e;
+            display: flex;
+            gap: 10px;
         }
 
         .btn-copy {
-            background-color: var(--heavy-orange);
+            background: var(--teal);
             color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .btn-copy:hover {
-            background-color: #e04f0f;
-        }
-
-        #promptTextarea {
-            width: 100%;
-            height: 350px;
-            border: 1px solid #CCC;
-            border-radius: 6px;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 0.9rem;
-            resize: vertical;
-        }
-
-        /* Utilities */
-        .disabled-group {
-            opacity: 0.6;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <h1>KENSANITY ILAW LESSON PLAN</h1>
-        <h2>AI PROMPT GENERATOR</h2>
-        <p>by Kensanity</p>
-    </header>
+    <div class="header-box">
+        <h1>KENSANITY AI ILAW LP PROMPT GENERATOR</h1>
+    </div>
+    <div class="sub-header">Elementary Grade Level Only!</div>
 
     <form id="promptForm" onsubmit="event.preventDefault();">
         
-        <!-- Inclusive Dates -->
+        <!-- Teacher Name -->
         <div class="form-group">
-            <label class="label-desc">Inclusive Dates</label>
-            <div class="picker-container">
-                <input type="date" id="startDate" onchange="updateDatesDisplay()">
-                <input type="date" id="endDate" onchange="updateDatesDisplay()">
-                <input type="text" id="datesDisplay" class="input-control" placeholder="Enter inclusive dates of the Lesson Plan!" readonly style="border:none; padding:5px;">
-            </div>
+            <label for="teacherName">Teacher's Name</label>
+            <input type="text" id="teacherName" placeholder="Teacher's Name">
         </div>
 
-        <!-- Learning Area selection -->
+        <!-- Grade Level -->
         <div class="form-group">
-            <label class="label-desc">Learning Area (Subject)</label>
-            <select id="learningArea" class="input-control" onchange="handleLearningAreaChange()" required>
-                <option value="" disabled selected hidden>Select Learning Area (Subject) here!</option>
-                <optgroup label="KS1" style="font-weight: bold;" data-responsive="false">
-                    <option value="Language">Language</option>
-                    <option value="Reading and Literacy">Reading and Literacy</option>
-                    <option value="Mathematics">Mathematics</option>
-                    <option value="Makabansa">Makabansa</option>
-                    <option value="GMRC">GMRC</option>
-                    <option value="Mother Tongue">Mother Tongue</option>
-                    <option value="Science">Science</option>
-                </optgroup>
-                <optgroup label="KS2" style="font-weight: bold;" data-responsive="false">
-                    <option value="Filipino">Filipino</option>
-                    <option value="English">English</option>
-                    <option value="Mathematics">Mathematics</option>
-                    <option value="Science">Science</option>
-                    <option value="Araling Panlipunan">Araling Panlipunan</option>
-                    <option value="GMRC">GMRC</option>
-                    <option value="MAPEH">MAPEH</option>
-                    <option value="EPP">EPP</option>
-                    <option value="TLE">TLE</option>
-                </optgroup>
-            </select>
-        </div>
-
-        <!-- Element selection placeholder -->
-        <div class="form-group" id="elementGroup">
-            <label class="label-desc">Subject Element</label>
-            <select id="subjectElement" class="input-control" disabled>
-                <option value="Not Applicable" selected>Not Applicable</option>
-            </select>
-        </div>
-
-        <!-- Term selection placeholder -->
-        <div class="form-group">
-            <label class="label-desc">Term Period</label>
-            <select id="termPeriod" class="input-control" required>
-                <option value="" disabled selected hidden>Choose Term period for the lesson!</option>
-                <option value="Term 1">Term 1</option>
-                <option value="Term 2">Term 2</option>
-                <option value="Term 3">Term 3</option>
-            </select>
-        </div>
-
-        <!-- Week Number selection -->
-        <div class="form-group">
-            <label class="label-desc">Week Number</label>
-            <select id="weekNumber" class="input-control" required>
-                <option value="" disabled selected hidden>Choose week number for the lesson!</option>
-                <!-- Generated by JS dynamic iteration Week 1 to 15 -->
-            </select>
-        </div>
-
-        <!-- Grade Level selection -->
-        <div class="form-group">
-            <label class="label-desc">Grade Level</label>
-            <select id="gradeLevel" class="input-control" required>
-                <option value="" disabled selected hidden>Choose the subject's Grade Level!</option>
+            <label for="gradeLevel">Grade Level</label>
+            <select id="gradeLevel">
+                <option value="" disabled selected>Select Grade level!</option>
                 <option value="Grade 1">Grade 1</option>
                 <option value="Grade 2">Grade 2</option>
                 <option value="Grade 3">Grade 3</option>
@@ -396,375 +304,379 @@
             </select>
         </div>
 
-        <!-- Section text placeholder -->
+        <!-- Section Name -->
         <div class="form-group">
-            <label class="label-desc">Section Name</label>
-            <input type="text" id="sectionName" class="input-control" placeholder="Enter section name for the Grade Level!">
+            <label for="sectionName">Section Name</label>
+            <input type="text" id="sectionName" placeholder="Enter Section here!">
         </div>
 
-        <!-- Time selection placeholder -->
+        <!-- Teacher Position -->
         <div class="form-group">
-            <label class="label-desc">Time Schedule/s</label>
-            <div class="picker-container" style="flex-wrap: wrap; align-items: center;">
-                <input type="time" id="timeStart">
-                <span>to</span>
-                <input type="time" id="timeEnd">
-                <button type="button" class="btn-copy" style="background-color: var(--light-teal);" onclick="addTimeSchedule()">Add Schedule</button>
-            </div>
-            <div class="time-badge-container" id="timeBadges"></div>
-            <input type="hidden" id="timeSchedulesTokens">
-        </div>
-
-        <!-- School Year selection -->
-        <div class="form-group">
-            <label class="label-desc">School Year</label>
-            <select id="schoolYear" class="input-control" required>
-                <option value="" disabled selected hidden>Choose school year!</option>
-                <!-- Generated dynamically 2026-2027 to 2032-2033 -->
+            <label for="teacherPosition">Teacher's Position</label>
+            <select id="teacherPosition">
+                <option value="" disabled selected>Select Teacher's position here!</option>
+                <option value="Teacher I">Teacher I</option>
+                <option value="Teacher II">Teacher II</option>
+                <option value="Teacher III">Teacher III</option>
+                <option value="Teacher IV">Teacher IV</option>
+                <option value="Teacher V">Teacher V</option>
+                <option value="Teacher VI">Teacher VI</option>
+                <option value="Teacher VII">Teacher VII</option>
+                <option value="Master Teacher I">Master Teacher I</option>
+                <option value="Master Teacher II">Master Teacher II</option>
+                <option value="Master Teacher III">Master Teacher III</option>
+                <option value="Master Teacher IV">Master Teacher IV</option>
+                <option value="Master Teacher V">Master Teacher V</option>
             </select>
         </div>
 
-        <!-- Teacher text placeholder -->
+        <!-- School Year -->
         <div class="form-group">
-            <label class="label-desc">Teacher Name</label>
-            <input type="text" id="teacherName" class="input-control" placeholder="Enter name of teacher!">
+            <label for="schoolYear">School Year</label>
+            <select id="schoolYear">
+                <option value="" disabled selected>Select School Year here!</option>
+                <option value="2026-2027">2026-2027</option>
+                <option value="2027-2028">2027-2028</option>
+                <option value="2028-2029">2028-2029</option>
+                <option value="2029-2030">2029-2030</option>
+                <option value="2030-2031">2030-2031</option>
+                <option value="2031-2032">2031-2032</option>
+                <option value="2032-2033">2032-2033</option>
+                <option value="2033-2034">2033-2034</option>
+            </select>
         </div>
 
-        <!-- School text placeholder -->
+        <!-- School Head Name -->
         <div class="form-group">
-            <label class="label-desc">School Name</label>
-            <input type="text" id="schoolName" class="input-control" placeholder="Enter name of school!">
+            <label for="schoolHead">School Head's Name</label>
+            <input type="text" id="schoolHead" placeholder="Enter name of school head here!">
         </div>
 
-        <!-- Learning Competency -->
+        <!-- School Head Position -->
         <div class="form-group">
-            <label class="label-desc">Learning Competency</label>
-            <textarea id="learningCompetency" class="input-control" rows="2" placeholder="Enter learning competency from BoW!" style="resize: vertical;"></textarea>
+            <label for="headPosition">School Head's Position</label>
+            <select id="headPosition">
+                <option value="" disabled selected>Select School Head's position here!</option>
+                <option value="TIC">TIC</option>
+                <option value="Head Teacher I">Head Teacher I</option>
+                <option value="Head Teacher II">Head Teacher II</option>
+                <option value="Head Teacher III">Head Teacher III</option>
+                <option value="School Principal I">School Principal I</option>
+                <option value="School Principal II">School Principal II</option>
+                <option value="School Principal III">School Principal III</option>
+                <option value="School Principal IV">School Principal IV</option>
+            </select>
         </div>
 
-        <!-- Performance Standard -->
+        <!-- Inclusive Dates -->
         <div class="form-group">
-            <label class="label-desc">Performance Standard</label>
-            <textarea id="performanceStandard" class="input-control" rows="2" placeholder="Enter performance standard from BoW!" style="resize: vertical;"></textarea>
+            <label>Inclusive Dates of the Lesson Plan</label>
+            <div class="date-range-container">
+                <input type="date" id="startDate" onchange="formatDates()">
+                <span style="color: var(--light-violet)">to</span>
+                <input type="date" id="endDate" onchange="formatDates()">
+            </div>
+            <div id="dateDisplay" class="date-display">Enter inclusive dates of the Lesson Plan!</div>
         </div>
 
-        <!-- Content Standard -->
+        <!-- School Name -->
         <div class="form-group">
-            <label class="label-desc">Content Standard</label>
-            <textarea id="contentStandard" class="input-control" rows="2" placeholder="Enter performance standard from BoW!" style="resize: vertical;"></textarea>
+            <label for="schoolName">School Name</label>
+            <input type="text" id="schoolName" placeholder="Enter School Name here!">
         </div>
 
-        <!-- Learner Profile Selection -->
+        <!-- Learning Area -->
         <div class="form-group">
-            <label class="label-desc">Learner Profile Options</label>
-            <div class="checkbox-dropdown" id="learnerProfileDropdown" onclick="toggleDropdown(event)">
-                Check options applicable to class!
-                <div class="checkbox-content" id="dropdownContent">
-                    <h4>Learner Strengths</h4>
-                    <div class="checkbox-item"><input type="checkbox" value="Active participants"> Active participants</div>
-                    <div class="checkbox-item"><input type="checkbox" value="Collaborative learners"> Collaborative learners</div>
-                    <div class="checkbox-item"><input type="checkbox" value="Visual learners"> Visual learners</div>
-                    <div class="checkbox-item"><input type="checkbox" value="Fast comprehension"> Fast comprehension</div>
-                    <div class="checkbox-item"><input type="checkbox" value="Creative thinkers"> Creative thinkers</div>
-                    <div class="checkbox-item"><input type="checkbox" value="Kinesthetic learners"> Kinesthetic learners</div>
+            <label for="learningArea">Learning Area/Subject</label>
+            <select id="learningArea" onchange="handleAreaChange()">
+                <option value="" disabled selected>Select Learning Area/Subject here!</option>
+                <option value="Language">Language</option>
+                <option value="Reading and Literacy">Reading and Literacy</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Makabansa">Makabansa</option>
+                <option value="Filipino">Filipino</option>
+                <option value="English">English</option>
+                <option value="Science">Science</option>
+                <option value="Araling Panlipunan">Araling Panlipunan</option>
+                <option value="MAPEH">MAPEH</option>
+                <option value="EPP">EPP</option>
+                <option value="TLE">TLE</option>
+                <option value="Good Manners and Right Conduct (GMRC)">Good Manners and Right Conduct (GMRC)</option>
+            </select>
+        </div>
 
-                    <h4>Barriers to the Learning Process</h4>
-                    <div class="checkbox-item"><input type="checkbox" value="Short attention span"> Short attention span</div>
-                    <div class="checkbox-item"><input type="checkbox" value="Reading difficulty"> Reading difficulty</div>
-                    <div class="checkbox-item"><input type="checkbox" value="Low numeracy skills"> Low numeracy skills</div>
-                    <div class="checkbox-item"><input type="checkbox" value="Limited internet access"> Limited internet access</div>
-                    <div class="checkbox-item"><input type="checkbox" value="language barriers"> language barriers</div>
-                    <div class="checkbox-item"><input type="checkbox" value="Special needs support"> Special needs support</div>
+        <!-- Element Selection -->
+        <div class="form-group" id="elementContainer" style="display: none;">
+            <label for="elementSelect">Element</label>
+            <select id="elementSelect">
+                <option value="" disabled selected>Select Element here!</option>
+            </select>
+        </div>
 
-                    <h4>Learner Interests</h4>
-                    <div class="checkbox-item"><input type="checkbox" value="Games and competition"> Games and competition</div>
-                    <div class="checkbox-item"><input type="checkbox" value="Technology"> Technology</div>
-                    <div class="checkbox-item"><input type="checkbox" value="Sports and physical activity"> Sports and physical activity</div>
-                    <div class="checkbox-item"><input type="checkbox" value="Social media and trends"> Social media and trends</div>
-                    <div class="checkbox-item"><input type="checkbox" value="Music and arts"> Music and arts</div>
-                    <div class="checkbox-item"><input type="checkbox" value="Real-life applications"> Real-life applications</div>
-                </div>
+        <!-- Term Selection -->
+        <div class="form-group">
+            <label for="termSelect">Term</label>
+            <select id="termSelect">
+                <option value="" disabled selected>Select Term here!</option>
+                <option value="Term 1">Term 1</option>
+                <option value="Term 2">Term 2</option>
+                <option value="Term 3">Term 3</option>
+            </select>
+        </div>
+
+        <!-- Week Selection -->
+        <div class="form-group">
+            <label for="weekSelect">Week</label>
+            <select id="weekSelect">
+                <option value="" disabled selected>Select Week here!</option>
+                <script>
+                    for(let i=1; i<=75; i++) {
+                        document.write(`<option value="Week ${i}">Week ${i}</option>`);
+                    }
+                </script>
+            </select>
+        </div>
+
+        <!-- Subject Time Schedule -->
+        <div class="form-group">
+            <label for="timeSchedule">Subject's Time Schedule</label>
+            <select id="timeSchedule">
+                <option value="" disabled selected>Select Subject's Time Schedule here!</option>
+                <option value="Term 1">Term 1</option>
+                <option value="Term 2">Term 2</option>
+                <option value="Term 3">Term 3</option>
+            </select>
+        </div>
+
+        <!-- Learner Strengths -->
+        <div class="form-group">
+            <label>Learner Strengths (Select multiple if applicable)</label>
+            <div class="checkbox-group" id="strengthsGroup">
+                <label class="checkbox-item"><input type="checkbox" value="Visual Learners"> Visual Learners</label>
+                <label class="checkbox-item"><input type="checkbox" value="Auditory Learners"> Auditory Learners</label>
+                <label class="checkbox-item"><input type="checkbox" value="Kinesthetic/Hands-on Learners"> Kinesthetic/Hands-on Learners</label>
+                <label class="checkbox-item"><input type="checkbox" value="Strong collaboration skills"> Strong collaboration skills</label>
+                <label class="checkbox-item"><input type="checkbox" value="Highly participative in class discussions"> Highly participative in class discussions</label>
+                <label class="checkbox-item"><input type="checkbox" value="Creative and artistic skills"> Creative and artistic skills</label>
+                <label class="checkbox-item"><input type="checkbox" value="Good analytical or logical reasoning"> Good analytical or logical reasoning</label>
             </div>
         </div>
 
-        <!-- Teaching Framework selection -->
+        <!-- Barriers to Learning -->
         <div class="form-group">
-            <label class="label-desc">Teaching Framework</label>
-            <select id="teachingFramework" class="input-control" required>
-                <option value="" disabled selected hidden>Select desired teaching framework!</option>
-                <option value="Auto-select: Let AI choose the best framework">Auto-select: Let AI choose the best framework</option>
-                <option value="4A's: Activity, Analysis, Abstraction, Application">4A's: Activity, Analysis, Abstraction, Application</option>
-                <option value="5E's: Engage, Explore, Explain, Elaborate, Evaluate">5E's: Engage, Explore, Explain, Elaborate, Evaluate</option>
+            <label>Possible Barriers to Learning (Select multiple if applicable)</label>
+            <div class="checkbox-group" id="barriersGroup">
+                <label class="checkbox-item"><input type="checkbox" value="Limited access to digital materials"> Limited access to digital materials</label>
+                <label class="checkbox-item"><input type="checkbox" value="Diverse reading comprehension levels"> Diverse reading comprehension levels</label>
+                <label class="checkbox-item"><input type="checkbox" value="Short attention spans"> Short attention spans</label>
+                <label class="checkbox-item"><input type="checkbox" value="Language barriers / Mother Tongue transition"> Language barriers / Mother Tongue transition</label>
+                <label class="checkbox-item"><input type="checkbox" value="Socio-economic challenges"> Socio-economic challenges</label>
+                <label class="checkbox-item"><input type="checkbox" value="Hyperactivity or easily distracted environments"> Hyperactivity or easily distracted environments</label>
+            </div>
+        </div>
+
+        <!-- Learners Interest -->
+        <div class="form-group">
+            <label>Learners' Interest (Select multiple if applicable)</label>
+            <div class="checkbox-group" id="interestsGroup">
+                <label class="checkbox-item"><input type="checkbox" value="Interactive digital games and gamified quizzes"> Interactive digital games and gamified quizzes</label>
+                <label class="checkbox-item"><input type="checkbox" value="Storytelling, legends, and colorful picture books"> Storytelling, legends, and colorful picture books</label>
+                <label class="checkbox-item"><input type="checkbox" value="Drawing, painting, and craft activities"> Drawing, painting, and craft activities</label>
+                <label class="checkbox-item"><input type="checkbox" value="Singing, rhythmic chants, and action songs"> Singing, rhythmic chants, and action songs</label>
+                <label class="checkbox-item"><input type="checkbox" value="Outdoor activities, roleplaying, and dynamic drama"> Outdoor activities, roleplaying, and dynamic drama</label>
+                <label class="checkbox-item"><input type="checkbox" value="Technology, gadgets, animations, and video clips"> Technology, gadgets, animations, and video clips</label>
+            </div>
+        </div>
+
+        <!-- Teaching Framework -->
+        <div class="form-group">
+            <label for="frameworkSelect">Teaching Framework</label>
+            <select id="frameworkSelect">
+                <option value="" disabled selected>Select Teaching Framework here!</option>
+                <option value="Auto-select: Let AI choose the best framework!">Auto-select: Let AI choose the best framework!</option>
+                <option value="4As: Activity, Analysis, Abstraction, Application">4As: Activity, Analysis, Abstraction, Application</option>
+                <option value="5Es: Engage, Explore, Explain, Elaborate, Evaluate">5Es: Engage, Explore, Explain, Elaborate, Evaluate</option>
                 <option value="Differentiated Instruction">Differentiated Instruction</option>
                 <option value="Inquiry-Based Learning">Inquiry-Based Learning</option>
             </select>
         </div>
 
-        <!-- Submit Button -->
-        <button type="button" class="btn-generate" onclick="generatePrompt()">Generate AI Prompt</button>
-    </form>
-
-    <!-- Output UI Container -->
-    <div class="output-container" id="outputArea">
-        <div class="output-header">
-            <h3>Generated AI Prompt Blueprint</h3>
-            <button class="btn-copy" onclick="copyToClipboard()">Copy Prompt</button>
+        <!-- Action Buttons -->
+        <div class="btn-container">
+            <button type="button" class="btn-generate" onclick="generatePrompt()">Generate AI ILAW LP Prompts</button>
+            <button type="button" class="btn-clear" onclick="clearForm()">Clear</button>
         </div>
-        <textarea id="promptTextarea" readonly></textarea>
+    </form>
+</div>
+
+<!-- Modal Dialog Box -->
+<div class="modal-overlay" id="promptModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Generated AI Master Prompt</h2>
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <pre class="prompt-text" id="promptOutput"></pre>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-copy" onclick="copyPrompt()">Copy Code Prompt</button>
+            <button class="btn-clear" style="flex:unset; width: 100px;" onclick="closeModal()">Close</button>
+        </div>
     </div>
 </div>
 
 <script>
-    // Initialize standard list arrays on window setup
-    window.onload = function() {
-        // Week generation 1 to 15
-        const weekSelect = document.getElementById('weekNumber');
-        for (let i = 1; i <= 15; i++) {
-            let opt = document.createElement('option');
-            opt.value = `Week ${i}`;
-            opt.innerHTML = `Week ${i}`;
-            weekSelect.appendChild(opt);
-        }
-
-        // School Year options generation 2026-2027 to 2032-2033
-        const sySelect = document.getElementById('schoolYear');
-        for (let year = 2026; year <= 2032; year++) {
-            let opt = document.createElement('option');
-            let termStr = `${year}-${year+1}`;
-            opt.value = termStr;
-            opt.innerHTML = termStr;
-            sySelect.appendChild(opt);
-        }
-
-        // Setup Event Listener to handle document-wide modal closing rules
-        document.addEventListener('click', function(e) {
-            const dropdown = document.getElementById('learnerProfileDropdown');
-            const content = document.getElementById('dropdownContent');
-            if (!dropdown.contains(e.target)) {
-                content.style.display = 'none';
-            }
-        });
-
-        // Track updates to checkboxes inside Learner Profile container
-        const checkboxes = document.querySelectorAll('#dropdownContent input[type="checkbox"]');
-        checkboxes.forEach(cb => {
-            cb.addEventListener('change', updateCheckboxesLabelSummary);
-        });
-    };
-
-    function updateDatesDisplay() {
-        const start = document.getElementById('startDate').value;
-        const end = document.getElementById('endDate').value;
-        const display = document.getElementById('datesDisplay');
-        if (start && end) {
-            display.value = `${start} to ${end}`;
-            display.style.fontStyle = 'normal';
-        } else if (start || end) {
-            display.value = start || end;
-            display.style.fontStyle = 'normal';
-        }
-    }
-
-    function handleLearningAreaChange() {
-        const la = document.getElementById('learningArea').value;
-        const elementSelect = document.getElementById('subjectElement');
+    function handleAreaChange() {
+        const area = document.getElementById('learningArea').value;
+        const container = document.getElementById('elementContainer');
+        const select = document.getElementById('elementSelect');
         
-        elementSelect.innerHTML = ''; // reset options
-
-        if (la === 'MAPEH') {
-            elementSelect.disabled = false;
-            let options = ['Music', 'Arts', 'Physical Education (PE)', 'Health'];
-            options.forEach(optVal => {
-                let opt = document.createElement('option');
-                opt.value = optVal;
-                opt.innerHTML = `*${optVal}`;
-                elementSelect.appendChild(opt);
-            });
-        } else if (la === 'EPP' || la === 'TLE') {
-            elementSelect.disabled = false;
-            let options = ['Agri-fishery Arts (AFA)', 'Family & Consumer Science (FCS)', 'Industrial Arts (IA)', 'Information & Communications Technology (ICT)'];
-            options.forEach(optVal => {
-                let opt = document.createElement('option');
-                opt.value = optVal;
-                opt.innerHTML = `*${optVal}`;
-                elementSelect.appendChild(opt);
-            });
-        } else {
-            elementSelect.disabled = true;
-            let opt = document.createElement('option');
-            opt.value = "Not Applicable";
-            opt.innerHTML = "Not Applicable";
-            elementSelect.appendChild(opt);
-            opt.selected = true;
-        }
-    }
-
-    // List trackers for multiple custom time intervals
-    let addedTimeSchedules = [];
-
-    function addTimeSchedule() {
-        const tStart = document.getElementById('timeStart').value;
-        const tEnd = document.getElementById('timeEnd').value;
+        select.innerHTML = '<option value="" disabled selected>Select Element here!</option>';
         
-        if (!tStart || !tEnd) {
-            alert('Please select both start and ending times before adding schedule blocks.');
-            return;
-        }
-
-        const formattedBlock = `${tStart}-${tEnd}`;
-        if (!addedTimeSchedules.includes(formattedBlock)) {
-            addedTimeSchedules.push(formattedBlock);
-            renderTimeBadges();
-        }
-    }
-
-    function removeTimeSchedule(index) {
-        addedTimeSchedules.splice(index, 1);
-        renderTimeBadges();
-    }
-
-    function renderTimeBadges() {
-        const container = document.getElementById('timeBadges');
-        container.innerHTML = '';
-        addedTimeSchedules.forEach((sched, index) => {
-            let badge = document.createElement('div');
-            badge.className = 'time-badge';
-            badge.innerHTML = `${sched} <span onclick="removeTimeSchedule(${index})">&times;</span>`;
-            container.appendChild(badge);
-        });
-        document.getElementById('timeSchedulesTokens').value = addedTimeSchedules.join('/');
-    }
-
-    function toggleDropdown(e) {
-        const content = document.getElementById('dropdownContent');
-        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'LABEL' && !e.target.classList.contains('checkbox-item')) {
-            content.style.display = (content.style.display === 'block') ? 'none' : 'block';
-        }
-    }
-
-    function updateCheckboxesLabelSummary() {
-        const dropdown = document.getElementById('learnerProfileDropdown');
-        const checked = document.querySelectorAll('#dropdownContent input[type="checkbox"]:checked');
-        if (checked.length > 0) {
-            dropdown.classList.add('has-values');
-            let vals = Array.from(checked).map(c => c.value);
-            dropdown.firstChild.textContent = vals.join(', ');
+        if (area.includes('MAPEH')) {
+            container.style.display = 'block';
+            const options = ['Music', 'Arts', 'Physical Education (PE)', 'Health', 'Not Applicable'];
+            options.forEach(opt => select.add(new Option(opt, opt)));
+        } else if (area.includes('EPP') || area.includes('TLE')) {
+            container.style.display = 'block';
+            const options = ['Agriculture and Fishery Arts (AFA)', 'Family and Consumer Science (FCS)', 'Industrial Arts (IA)', 'Information and Communications Technology (ICT)', 'Not Applicable'];
+            options.forEach(opt => select.add(new Option(opt, opt)));
         } else {
-            dropdown.classList.remove('has-values');
-            dropdown.firstChild.textContent = "Check options applicable to class!";
+            container.style.display = 'none';
         }
+    }
+
+    function formatDates() {
+        const startVal = document.getElementById('startDate').value;
+        const endVal = document.getElementById('endDate').value;
+        const display = document.getElementById('dateDisplay');
+        
+        if (startVal && endVal) {
+            const options = { day: '2-digit', month: 'short', year: 'numeric' };
+            const d1 = new Date(startVal).toLocaleDateString('en-GB', options).replace(/ /g, '/');
+            const d2 = new Date(endVal).toLocaleDateString('en-GB', options).replace(/ /g, '/');
+            display.innerText = `${d1} to ${d2}`;
+        } else {
+            display.innerText = "Enter inclusive dates of the Lesson Plan!";
+        }
+    }
+
+    function getSelectedCheckboxes(groupId) {
+        const checked = [];
+        document.querySelectorAll(`#${groupId} input:checked`).forEach(cb => {
+            checked.push(cb.value);
+        });
+        return checked.length > 0 ? checked.join(', ') : 'Not Specific';
     }
 
     function generatePrompt() {
-        // Collect Field states dynamically safely matching parameters
-        const inclusiveDates = document.getElementById('datesDisplay').value || "[Inclusive Dates]";
-        const learningArea = document.getElementById('learningArea').value || "[Learning Area]";
-        const elemVal = document.getElementById('subjectElement').value;
-        const element = (elemVal === "Not Applicable") ? "" : elemVal;
-        const termPeriod = document.getElementById('termPeriod').value || "[Term Period]";
-        const weekNum = document.getElementById('weekNumber').value || "[Week Number]";
+        const teacherName = document.getElementById('teacherName').value || "[Teacher's Name]";
         const gradeLevel = document.getElementById('gradeLevel').value || "[Grade Level]";
         const sectionName = document.getElementById('sectionName').value || "[Section Name]";
-        const schedules = document.getElementById('timeSchedulesTokens').value || "[Time Schedule]";
+        const teacherPos = document.getElementById('teacherPosition').value || "[Position]";
         const schoolYear = document.getElementById('schoolYear').value || "[School Year]";
-        const teacherName = document.getElementById('teacherName').value || "[Teacher Name]";
+        const schoolHead = document.getElementById('schoolHead').value || "[School Head]";
+        const headPosition = document.getElementById('headPosition').value || "[Head Position]";
+        const dateRange = document.getElementById('dateDisplay').innerText;
         const schoolName = document.getElementById('schoolName').value || "[School Name]";
-        const learningComp = document.getElementById('learningCompetency').value || "[Learning Competency]";
-        const performanceStd = document.getElementById('performanceStandard').value || "[Performance Standard]";
-        const contentStd = document.getElementById('contentStandard').value || "[Content Standard]";
-        const framework = document.getElementById('teachingFramework').value || "[Framework]";
+        const learningArea = document.getElementById('learningArea').value || "[Learning Area]";
+        
+        const elementSelect = document.getElementById('elementSelect').value;
+        const elementText = document.getElementById('elementContainer').style.display !== 'none' && elementSelect ? `Element: ${elementSelect}\n` : '';
+        
+        const term = document.getElementById('termSelect').value || "[Term]";
+        const week = document.getElementById('weekSelect').value || "[Week]";
+        const timeSchedule = document.getElementById('timeSchedule').value || "[Time Schedule]";
+        
+        const strengths = getSelectedCheckboxes('strengthsGroup');
+        const barriers = getSelectedCheckboxes('barriersGroup');
+        const interests = getSelectedCheckboxes('interestsGroup');
+        const framework = document.getElementById('frameworkSelect').value || "Auto-select: Let AI choose the best framework!";
 
-        // Capture Selected profile checkbox attributes split perfectly
-        const selectedProfiles = Array.from(document.querySelectorAll('#dropdownContent input[type="checkbox"]:checked')).map(c => c.value);
-        const profilesString = selectedProfiles.length > 0 ? selectedProfiles.join(', ') : "Active participants, Short attention span, Technology driven interests";
+        const prompt = `Act as an experienced master teacher, curriculum designer, and expert AI Lesson Plan Architect. Generate a complete, highly-detailed, and structural ILAW Lesson Plan customized precisely using the administrative metadata and student characteristics profile provided below.
 
-        // Assemble Structured Output template prompt strictly mapping your definition
-        let aiPromptStr = `Act as an experienced, expert DepEd Master Teacher. Create a 4-day ILAW lesson plan for:
-- Grade Level: ${gradeLevel}
-- Learning Area: ${learningArea}
-- Subject Element: ${element}
-- Inclusive Dates: ${inclusiveDates}
-- Term: ${termPeriod}
-- Week Number: ${weekNum}
-- Section: ${sectionName}
-- Schedule: ${schedules}
-- School Year: ${schoolYear}
+### ADMINISTRATIVE METADATA PROFILE:
+- School Name: ${schoolName}
+- Teacher Name: ${teacherName} (${teacherPos})
+- Grade Level & Section: ${gradeLevel} - ${sectionName}
+- Learning Area / Subject: ${learningArea}
+${elementText}- Term context: ${term} | Schedule Sequence: ${timeSchedule}
+- Implementation Scope: ${week}
+- Inclusive Tracking Dates: ${dateRange}
+- Approving Authority: ${schoolHead} (${headPosition})
+- Selected Pedagogical Framework Focus: ${framework}
 
-[generate lesson name, be creative in naming the lesson, it should have hook]
-[generate references from books, online resources, apply proper citation]
-[generate Declaration of AI Use]
-[generate 4 different intentions for the 4 sessions, each session has unique intention description]
+### LEARNERS CONTEXTUAL BEHAVIORAL PROFILE:
+- Demonstrated Learner Strengths: ${strengths}
+- Identified Potential Barriers to Learning: ${barriers}
+- Core Student Interest Categories: ${interests}
 
-### Standards Mapping
-* **Learning Competency**: ${learningComp}
-* **Performance Standard**: ${performanceStd}
-* **Content Standard**: ${contentStd}
+### STRUCTURAL ARCHITECTURE INSTRUCTIONS:
+Construct the Lesson Plan precisely as a 5-column Markdown Table. 
+The column arrangement must follow this alignment order:
+Column 1: Components/Headers
+Column 2: Session 1 Content
+Column 3: Session 2 Content
+Column 4: Session 3 Content
+Column 5: Session 4 Content
 
-[generate learning objectives from each session, each session has 3 unique objectives for Knowledge, Skills, and Attitude, generate objectives uniquely for 4 sessions]
+For Column 1, construct the structural components linearly using these exact headers:
+1. Topic (Create a highly creative, vivid title matching the core lesson theme)
+2. Declaration of AI Use (Include complete clear instructional citations detailing where AI was utilized for content compilation, digital asset visualization, and simulation structures)
+3. Intentions (Define expected pedagogical achievements linked cleanly with core competency limits)
+4. Learning Competency and Curriculum Standards (Transcribe exact standard guidelines, performance anchors, and systemic competencies)
+5. Learning Objectives (Explicitly track 3 distinct measurable outcomes per session: Knowledge-based cognitive targets, Skill-based operational targets, and Attitude/Affective targets)
+6. Learner Context (Write randomized, dynamically positive descriptive profiles tracking how students respond to ongoing lessons, mapping out how their specific strengths, interests, and stated learning barriers are directly managed)
+7. Learning Experience (Incorporate direct instruction scripts, guided application projects, and individual metrics across each session)
+8. Pre-Lesson
+9. Flow
+10. Learning Resources
+11. Opportunities for Integration
+12. Assessment
+13. Formative Assessment
+14. Ways Forward
+15. Extended Learning Opportunities
+16. Reflections
 
-### Learner Profile Matrix Context
-The targeted metrics applied for this class profile are: ${profilesString}.
-[generate learners' strengths for the lesson, indicate also possible barriers that disable them to learn]
+### COMPREHENSIVE TEXTEXPANSION REQUIREMENTS (CRITICAL FOR PORTFOLIO AND OBSERVATION REVIEW):
+For the multi-session items ("Pre-Lesson", "Flow", "Learning Resources", "Opportunities for Integration", "Assessment", "Formative Assessment", "Ways Forward", "Extended Learning Opportunities", and "Reflections"), write extensive, highly granular, long paragraphs unique to every distinct session column (Sessions 1 to 4). Do not leave cells empty or use repetitive placeholders across session columns.
 
-### Framework Setup
-Teaching Framework Strategy Selected: ${framework}
-[generate a comprehensive description for the teaching framework to be applied in each session]
+Detailed Segment Design Paradigms:
+- Pre-Lesson (Teacher's Active Point of View): Detail exact dialogue scripts, attention-grabbing opening transitions, board prompts, and motivational sequences. Format example: The teacher will display a vibrant graphic on the screen, project their voice energetically, and say, "Welcome back, discoverers! Look closely at the image on the slide... what secret is hidden inside?"
+- Flow (Teacher's Operational Point of View): Compose highly descriptive, multi-paragraph instructional workflows applying the selected framework (${framework}). Seamlessly weave in explicit strategies to: make objectives clear to young minds, scaffold guided practice tasks completely before independent performance, continuously inspect learner well-being/mastery, tie current work directly to historical prerequisite lessons, design active physical collaborations, spark internal metacognitive reflections on why the topic matters, and build adaptive inclusions ensuring every learner's barrier is bridged.
+- Learning Resources: Explicitly list complete primary assets, contingency configurations, fallback manual worksheets, and digital alternative kits prepared for emergencies.
+- Opportunities for Integration: Detail creative interdisciplinary bridges. Explicitly outline integration targets into adjacent areas (e.g., Mathematics integration via structural quantification, Science integration through ecological connectivity, or Language integration through systemic vocabulary).
+- Assessment & Formative Assessment: Author rich, multi-paragraph operational rubrics alongside complete creative text questions (multiple-choice or alternative response setups) that feature diverse scaffolding response adaptations, small group diagnostic breakdowns, and visual prompts designed to protect inclusion standards.
+- Ways Forward & Extended Learning Opportunities: Provide highly targeted remediation paths, rapid multi-tiered intervention systems for tracking student gaps, and imaginative real-world exploration projects extending beyond school bounds.
+- Reflections (Authentic Self-Assessment): Write deeply reflective, long diagnostic summaries focusing on pacing tweaks, tracking student behavioral adjustments to technology resources, notes for sharing outcomes with parent associations, and specific tactical questions reserved for an instructional coach or Master Teacher.`;
 
-### Detailed Lesson Phases Structure
-[generate detailed activity before lesson proper, example: "I have here a picture of a Lion. Are you familiar with the Lion? Very good! What is the correct term for the female Lion? Very good! Lioness is what you call a female Lion...." AI should be creative in creating pre-lesson activities. Each session has different pre-lesson activities so AI should provide unique pre-lesson activities for every session based on the Learning Objectives for the Session.]
-
-[generate detailed Flow (lesson proper) of the lesson. For the framework, refer to the information in Learner Profile Section. Rely your actions here based on the information in Learner Profile Section. AI should provide what actually the teacher would say. Example: "Our lesson for today is about the classifications of plant propagation. Do you know each one of them? We will be doing activities to know better about plant propagation...", AI should be creative in designing this part in a comprehensive way. AI should describe the activities that the teacher can implement in 1 or more sessions to meet the learning objectives. AI should apply the Learning Design Principles by thinking about how to:
-- make the objectives clear for the learners
-- guide learners before letting them try the task on their own
-- check the state of the learners’ well-being, understanding, and mastery over the lesson
-- connect today's new concepts to past competencies
-- encourage collaboration among learners
-- invite learners to reflect on why this matters to them
-- ensure inclusion for learners’ varied abilities, learning styles, and contexts
-Flow is the typical Teaching Procedure and should fill in different Teaching Procedures for every Session based on the Learning Objectives for the Session.]
-
-### Resource & Supplemental Assets 
-[generate Learning Resources for every session based on the session learning objectives and teaching framework. Each session has different activities so AI should provide resources that are useful in the conduct of the lesson for the session. Included in the resources are the powerpoint presentation, smart tv, desktop computers, laptops, internet connection, tablets, pictures, modules, charts, etc.]
-
-### Custom Session Integration
-[generate Opportunities for Integration. AI will write down any possibilities to meaningfully integrate the lesson to another learning area (Subject), special topic, or technology. AI should write N/A if not applicable. Each session has different lessons so AI should provide unique Opportunities for Integration on every Session if applicable based on the Learning Objectives for the Session.]
-
-### Evaluative Execution
-[generate detailed description of the Assessment being applied on every session. AI should describe the assessment being used, its connection to the learning competency and its effectiveness to measure the learnings of the learners. Each session has different description of assessments so AI should provide unique assessment description for every session based on the Learning Objectives for the Session.]
-
-[generate Formative Assessment. AI should provide the actual assessment tool. Example: "Direction: Choose the letter of the correct answer. Write your answers on your answer sheets.
-1. Which of the following do not belong to the group.
-a. mouse   b. word    c. keyboard    d. monitor ....", AI should be creative in designing the formative /assessment part. Each session has different formative assessment so AI should provide unique formative assessments for every session based on the Learning Objectives for the Session.]
-
-### Remediations and Extended Operations
-[generate Ways Forward suggested activities. AI should fill in and design activity that addresses learners who are in need of remediation and enrichment. Indicate also positive outcomes situations that would plan the next step of the learners learning.]
-
-[generate detailed Extended Learning Opportunities. AI here should suggest other learning experiences outside the classroom/class hours that learners may want to access to reinforce what they have learned, to spark their curiosities further, or that may provide them support in their areas of difficulty. Fill in different Extended Learning Opportunities suggestions on every Session based on the Learning Objectives for the Session.]
-
-[generate detailed Reflections. AI should indicate positive outcome brought by the entire teaching and learning process and AI should fill in what changes should take in place in order for the learning to become more meaningful. AI should ensure the next activity is interesting and worth exploring. Each session has different Reflections based on the possible outcome of the Learning Objectives for the Session.]
-
-### Metadata Verification Signature 
-- Teacher: ${teacherName}
-- Teacher Position: DepEd Teacher
-- School: ${schoolName}
-- School Head Name: [Insert Designated Principal/School Head Name]
-- School Head Position: Principal / School Head
-
-[generate prompt to copy the uploaded file]
-[generate prompt for downloadable excel file document in A4 size, portrait orientation with margins: 2.5cm top, 1cm bottom, 1.8cm left, 1.8cm right, content texts has 9 font size, fill in required information in ken-ilaw-temp.xlsx]`;
-
-        document.getElementById('promptTextarea').value = aiPromptStr;
-        document.getElementById('outputArea').style.display = 'block';
-        document.getElementById('outputArea').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('promptOutput').innerText = prompt;
+        document.getElementById('promptModal').style.display = 'flex';
     }
 
-    function copyToClipboard() {
-        const textarea = document.getElementById('promptTextarea');
-        textarea.select();
-        textarea.setSelectionRange(0, 99999); /* For mobile devices */
-        navigator.clipboard.writeText(textarea.value);
-        alert("ILAW AI Prompt successfully copied to clipboard!");
+    function closeModal() {
+        document.getElementById('promptModal').style.display = 'none';
+    }
+
+    function copyPrompt() {
+        const text = document.getElementById('promptOutput').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            alert('AI Prompt copied successfully to clipboard!');
+        }).catch(err => {
+            alert('Failed to copy text. Please select manually.');
+        });
+    }
+
+    function clearForm() {
+        document.getElementById('promptForm').reset();
+        document.getElementById('elementContainer').style.display = 'none';
+        document.getElementById('dateDisplay').innerText = "Enter inclusive dates of the Lesson Plan!";
+        
+        // Focus back to teacher's name
+        document.getElementById('teacherName').focus();
     }
 </script>
+
 </body>
 </html>
