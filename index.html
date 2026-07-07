@@ -11,6 +11,7 @@
             --neon-green: #70E000;
             --fuchsia: #F72585;
             --indigo: #3A0CA3;
+            --select-bg: #1A0A73;
             --light-violet: #E0AAFF;
             --dark-bg: #120924;
             --card-bg: #1A0F30;
@@ -82,7 +83,7 @@
             font-size: 0.95rem;
         }
 
-        input[type="text"], select, input[type="date"] {
+        input[type="text"], input[type="date"], textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid var(--teal);
@@ -93,12 +94,40 @@
             transition: all 0.3s ease;
         }
 
-        input::placeholder {
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        /* Enforce high visibility dropdown menus */
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--teal);
+            background-color: var(--select-bg) !important;
+            color: #ffffff !important;
+            font-weight: bold !important;
+            font-style: italic !important;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        select option {
+            background-color: var(--select-bg) !important;
+            color: #ffffff !important;
+            font-weight: bold !important;
+            font-style: italic !important;
+        }
+
+        input::placeholder, textarea::placeholder {
             font-style: italic;
             color: #a0a0a0;
         }
 
-        input:focus, select:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--fuchsia);
             box-shadow: 0 0 8px var(--fuchsia);
@@ -121,7 +150,6 @@
             font-style: italic;
         }
 
-        /* Time Picker Row Styles */
         .time-picker-wrapper {
             background: rgba(255, 255, 255, 0.03);
             border: 1px dashed var(--indigo);
@@ -356,11 +384,13 @@
 
     <form id="promptForm" onsubmit="event.preventDefault();">
         
+        <!-- Teacher Name -->
         <div class="form-group">
             <label for="teacherName">Teacher's Name</label>
             <input type="text" id="teacherName" placeholder="Teacher's Name">
         </div>
 
+        <!-- Grade Level -->
         <div class="form-group">
             <label for="gradeLevel">Grade Level</label>
             <select id="gradeLevel">
@@ -374,11 +404,13 @@
             </select>
         </div>
 
+        <!-- Section Name -->
         <div class="form-group">
             <label for="sectionName">Section Name</label>
             <input type="text" id="sectionName" placeholder="Enter Section here!">
         </div>
 
+        <!-- Teacher Position -->
         <div class="form-group">
             <label for="teacherPosition">Teacher's Position</label>
             <select id="teacherPosition">
@@ -398,6 +430,7 @@
             </select>
         </div>
 
+        <!-- School Year -->
         <div class="form-group">
             <label for="schoolYear">School Year</label>
             <select id="schoolYear">
@@ -413,11 +446,13 @@
             </select>
         </div>
 
+        <!-- School Head Name -->
         <div class="form-group">
             <label for="schoolHead">School Head's Name</label>
             <input type="text" id="schoolHead" placeholder="Enter name of school head here!">
         </div>
 
+        <!-- School Head Position -->
         <div class="form-group">
             <label for="headPosition">School Head's Position</label>
             <select id="headPosition">
@@ -433,6 +468,7 @@
             </select>
         </div>
 
+        <!-- Inclusive Dates -->
         <div class="form-group">
             <label>Inclusive Dates of the Lesson Plan</label>
             <div class="date-range-container">
@@ -443,11 +479,13 @@
             <div id="dateDisplay" class="date-display">Enter inclusive dates of the Lesson Plan!</div>
         </div>
 
+        <!-- School Name -->
         <div class="form-group">
             <label for="schoolName">School Name</label>
             <input type="text" id="schoolName" placeholder="Enter School Name here!">
         </div>
 
+        <!-- Learning Area -->
         <div class="form-group">
             <label for="learningArea">Learning Area/Subject</label>
             <select id="learningArea" onchange="handleAreaChange()">
@@ -467,6 +505,7 @@
             </select>
         </div>
 
+        <!-- Element Selection -->
         <div class="form-group" id="elementContainer" style="display: none;">
             <label for="elementSelect">Element</label>
             <select id="elementSelect">
@@ -474,6 +513,7 @@
             </select>
         </div>
 
+        <!-- Term Selection -->
         <div class="form-group">
             <label for="termSelect">Term</label>
             <select id="termSelect">
@@ -484,6 +524,7 @@
             </select>
         </div>
 
+        <!-- Week Selection -->
         <div class="form-group">
             <label for="weekSelect">Week</label>
             <select id="weekSelect">
@@ -496,10 +537,12 @@
             </select>
         </div>
 
+        <!-- Subject Time Schedule Dynamic Multi-Picker System -->
         <div class="form-group">
             <label>Subject's Time Schedule</label>
             <div class="time-picker-wrapper">
                 <div class="time-picker-row">
+                    <!-- Start Time -->
                     <div class="time-picker-block">
                         <span style="font-size:0.8rem; display:block; margin-bottom:4px; color:var(--teal)">From:</span>
                         <div class="time-select-group">
@@ -516,6 +559,7 @@
                         </div>
                     </div>
                     
+                    <!-- End Time -->
                     <div class="time-picker-block">
                         <span style="font-size:0.8rem; display:block; margin-bottom:4px; color:var(--fuchsia)">To:</span>
                         <div class="time-select-group">
@@ -535,10 +579,30 @@
                     <button type="button" class="btn-add-time" onclick="addTimeSchedule()">Add Time</button>
                 </div>
 
+                <!-- Display Appended Items container -->
                 <div id="timeTagsContainer" class="time-tags-container"></div>
             </div>
         </div>
 
+        <!-- Learning Competency -->
+        <div class="form-group">
+            <label for="learningCompetency">Learning Competency</label>
+            <textarea id="learningCompetency" placeholder="Insert learning competency here!"></textarea>
+        </div>
+
+        <!-- Performance Standard -->
+        <div class="form-group">
+            <label for="performanceStandard">Performance Standard</label>
+            <textarea id="performanceStandard" placeholder="Insert performance standard here!"></textarea>
+        </div>
+
+        <!-- Content Standard -->
+        <div class="form-group">
+            <label for="contentStandard">Content Standard</label>
+            <textarea id="contentStandard" placeholder="Insert content standard here!"></textarea>
+        </div>
+
+        <!-- Learner Strengths -->
         <div class="form-group">
             <label>Learner Strengths (Select multiple if applicable)</label>
             <div class="checkbox-group" id="strengthsGroup">
@@ -552,6 +616,7 @@
             </div>
         </div>
 
+        <!-- Barriers to Learning -->
         <div class="form-group">
             <label>Possible Barriers to Learning (Select multiple if applicable)</label>
             <div class="checkbox-group" id="barriersGroup">
@@ -564,6 +629,7 @@
             </div>
         </div>
 
+        <!-- Learners Interest -->
         <div class="form-group">
             <label>Navigating Learners' Interest (Select multiple if applicable)</label>
             <div class="checkbox-group" id="interestsGroup">
@@ -576,6 +642,7 @@
             </div>
         </div>
 
+        <!-- Teaching Framework -->
         <div class="form-group">
             <label for="frameworkSelect">Teaching Framework</label>
             <select id="frameworkSelect">
@@ -588,6 +655,7 @@
             </select>
         </div>
 
+        <!-- Action Buttons -->
         <div class="btn-container">
             <button type="button" class="btn-generate" onclick="generatePrompt()">Generate AI ILAW LP Prompts</button>
             <button type="button" class="btn-clear" onclick="clearForm()">Clear</button>
@@ -595,6 +663,7 @@
     </form>
 </div>
 
+<!-- Modal Dialog Box -->
 <div class="modal-overlay" id="promptModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -708,15 +777,19 @@
         const term = document.getElementById('termSelect').value || "[Term]";
         const week = document.getElementById('weekSelect').value || "[Week]";
         
-        // Resolve dynamic list schedules or standard string replacement
         const timeScheduleStr = dynamicTimeSchedules.length > 0 ? dynamicTimeSchedules.join(', ') : "[No schedule sessions appended]";
         
+        // Curate the target standard values
+        const learningCompetencyValue = document.getElementById('learningCompetency').value || "[Not Specified]";
+        const performanceStandardValue = document.getElementById('performanceStandard').value || "[Not Specified]";
+        const contentStandardValue = document.getElementById('contentStandard').value || "[Not Specified]";
+
         const strengths = getSelectedCheckboxes('strengthsGroup');
         const barriers = getSelectedCheckboxes('barriersGroup');
         const interests = getSelectedCheckboxes('interestsGroup');
         const framework = document.getElementById('frameworkSelect').value || "Auto-select: Let AI choose the best framework!";
 
-        const prompt = `Act as an experienced master teacher, curriculum designer, and expert AI Lesson Plan Architect. Generate a complete, highly-detailed, and structural ILAW Lesson Plan customized precisely using the administrative metadata and student characteristics profile provided below.
+        const prompt = `Act as an experienced master teacher, curriculum designer, and expert AI Lesson Plan Architect. Generate a complete, highly-detailed, and structural ILAW Lesson Plan customized precisely using the administrative metadata, curricular framework metrics, and student characteristics profile provided below.
 
 ### ADMINISTRATIVE METADATA PROFILE:
 - School Name: ${schoolName}
@@ -728,6 +801,11 @@ ${elementText}- Term context: ${term} | Schedule Timestamps Block: ${timeSchedul
 - Inclusive Tracking Dates: ${dateRange}
 - Approving Authority: ${schoolHead} (${headPosition})
 - Selected Pedagogical Framework Focus: ${framework}
+
+### CURRICULAR ANCHORS & STANDARDS CONTEXT:
+- Provided Learning Competency: ${learningCompetencyValue}
+- Provided Performance Standard: ${performanceStandardValue}
+- Provided Content Standard: ${contentStandardValue}
 
 ### LEARNERS CONTEXTUAL BEHAVIORAL PROFILE:
 - Demonstrated Learner Strengths: ${strengths}
@@ -744,13 +822,13 @@ Column 4: Session 3 Content
 Column 5: Session 4 Content
 
 For Column 1, construct the structural components linearly using these exact headers:
-1. Topic (Create a highly creative, vivid title matching the core lesson theme)
+1. Topic (Create a highly creative, vivid title matching the core lesson theme and standards context)
 2. Declaration of AI Use (Include complete clear instructional citations detailing where AI was utilized for content compilation, digital asset visualization, and simulation structures)
 3. Intentions (Define expected pedagogical achievements linked cleanly with core competency limits)
-4. Learning Competency and Curriculum Standards (Transcribe exact standard guidelines, performance anchors, and systemic competencies)
-5. Learning Objectives (Explicitly track 3 distinct measurable outcomes per session: Knowledge-based cognitive targets, Skill-based operational targets, and Attitude/Affective targets)
+4. Learning Competency and Curriculum Standards (Directly analyze, decompose, and map the explicit standards provided: Competency: "${learningCompetencyValue}", Performance: "${performanceStandardValue}", Content: "${contentStandardValue}")
+5. Learning Objectives (Explicitly track 3 distinct measurable outcomes per session based on these standards: Knowledge-based cognitive targets, Skill-based operational targets, and Attitude/Affective targets)
 6. Learner Context (Write randomized, dynamically positive descriptive profiles tracking how students respond to ongoing lessons, mapping out how their specific strengths, interests, and stated learning barriers are directly managed)
-7. Learning Experience (Incorporate direct instruction scripts, guided application projects, and individual metrics across each session)
+7. Learning Experience (Incorporate direct instruction scripts, guided application projects, and individual metrics across each session matching the core content framework)
 8. Pre-Lesson
 9. Flow
 10. Learning Resources
@@ -762,7 +840,7 @@ For Column 1, construct the structural components linearly using these exact hea
 16. Reflections
 
 ### COMPREHENSIVE TEXTEXPANSION REQUIREMENTS (CRITICAL FOR PORTFOLIO AND OBSERVATION REVIEW):
-For the multi-session items ("Pre-Lesson", "Flow", "Learning Resources", "Opportunities for Integration", "Assessment", "Formative Assessment", "Ways Forward", "Extended Learning Opportunities", and "Reflections"), write extensive, highly granular, long paragraphs unique to every distinct session column (Sessions 1 to 4). Do not leave cells empty or use repetitive placeholders across session columns.
+For the multi-session items ("Pre-Lesson", "Flow", "Learning Resources", "Opportunities for Integration", "Assessment", "Formative Assessment", "Ways Forward", "Extended Learning Opportunities", and "Reflections"), write extensive, highly granular, long paragraphs unique to every distinct session column (Sessions 1 to 4). Do not leave cells empty or use repetitive placeholders across session columns. Ensure every component aligns explicitly back to the designated Content Standard, Performance Standard, and Learning Competency provided in the prompt metadata.
 
 Detailed Segment Design Paradigms:
 - Pre-Lesson (Teacher's Active Point of View): Detail exact dialogue scripts, attention-grabbing opening transitions, board prompts, and motivational sequences. Format example: The teacher will display a vibrant graphic on the screen, project their voice energetically, and say, "Welcome back, discoverers! Look closely at the image on the slide... what secret is hidden inside?"
